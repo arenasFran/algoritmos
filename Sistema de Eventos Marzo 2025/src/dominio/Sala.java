@@ -12,6 +12,10 @@ public class Sala {
     private int Capacidad;
     private ListaSimple<LocalDate> fechasOcupadas;
 
+    public void setFechasOcupadas(ListaSimple<LocalDate> fechasOcupadas) {
+        this.fechasOcupadas = fechasOcupadas;
+    }
+
     public ListaSimple<LocalDate> getFechasOcupadas() {
         return fechasOcupadas;
     }
@@ -37,5 +41,26 @@ public class Sala {
         this.setCapacidad(capacidad);
         this.fechasOcupadas = new ListaSimple<>();
 
+    }
+    
+    @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null || getClass() != obj.getClass()) return false;
+
+    Sala sala = (Sala) obj;
+    if (this.getNombre() == null || sala.getNombre() == null) return false;
+
+    boolean iguales = this.getNombre().trim().equalsIgnoreCase(sala.getNombre().trim());
+    System.out.println("Comparando: '" + this.getNombre() + "' con '" + sala.getNombre() + "' => " + iguales);
+    return iguales;
+}
+@Override
+public String toString() {
+    return "Sala{" + "nombre='" + Nombre + "', capacidad=" + Capacidad + '}';
+}
+    @Override
+    public int hashCode() {
+        return Nombre != null ? Nombre.toLowerCase().hashCode() : 0;
     }
 }

@@ -13,4 +13,5 @@ public interface IListaSimple<T> {
     public void vaciar();
     public Nodo<T> getInicio();
     public T obtenerPorIndice(int indice);
+   
 }

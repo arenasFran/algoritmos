@@ -1,6 +1,7 @@
 package sistemaAutogestion;
 
 import dominio.Cliente;
+import dominio.Sala;
 import java.time.LocalDate;
 import tads.IListaSimple;
 import tads.ListaSimple;
@@ -8,23 +9,57 @@ import tads.Nodo;
 
 public class Sistema implements IObligatorio {
      private IListaSimple<Cliente> listaClientes;
-     
-    public Sistema(){
+     private IListaSimple<Sala> listaSalas;
+    
+     public Sistema(){
         listaClientes = new ListaSimple<Cliente>();
+        listaSalas = new ListaSimple<Sala>();
     }
     
-    
-    
+  
     
     @Override
     public Retorno crearSistemaDeGestion() {
         return Retorno.noImplementada();
     }
 
-    @Override
-    public Retorno registrarSala(String nombre, int capacidad) {
-        return Retorno.noImplementada();
+@Override
+public Retorno registrarSala(String nombre, int capacidad) {
+    // Validar capacidad (ERROR_2)
+    if (capacidad <= 0) {
+        return new Retorno(Retorno.Resultado.ERROR_2);
     }
+    
+    // Validar nombre no nulo o vacío (ERROR_1)
+    if (nombre == null || nombre.trim().isEmpty()) {
+        return new Retorno(Retorno.Resultado.ERROR_1);
+    }
+    
+    // Crear objeto temporal para comparación
+    Sala salaComparacion = new Sala(nombre.trim(), 0); // La capacidad no importa para la comparación
+    
+    // Verificar si ya existe una sala con ese nombre usando contiene()
+    if (listaSalas.contiene(salaComparacion)) {
+        return new Retorno(Retorno.Resultado.ERROR_1);
+    }
+    
+    // Crear y agregar la nueva sala
+    Sala nuevaSala = new Sala(nombre.trim(), capacidad);
+    listaSalas.agregarFin(nuevaSala);
+    
+    return new Retorno(Retorno.Resultado.OK);
+}
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public Retorno eliminarSala(String nombre) {

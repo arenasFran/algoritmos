@@ -13,11 +13,16 @@ public class ListaSimple<T> implements IListaSimple<T> {
         this.tamaño = tamaño;
     }
 
+    
+
     public ListaSimple() {
         this.inicio = null;
         this.fin = null;
         this.tamaño = 0;
     }
+    
+
+    
         @Override
         public T obtenerPorIndice(int indice) {
         if (indice < 0 || indice >= tamaño) {
@@ -37,61 +42,86 @@ public class ListaSimple<T> implements IListaSimple<T> {
         Nodo<T> nuevoNodo = new Nodo<>(dato);
         if (inicio == null) {
             inicio = nuevoNodo;
+            fin = nuevoNodo;
         } else {
-            Nodo<T> actual = inicio;
-            while (actual.getSiguiente() != null) {
-                actual = actual.getSiguiente();
-            }
-            actual.setSiguiente(nuevoNodo);
+        fin.setSiguiente(nuevoNodo);
+        fin = nuevoNodo;
         }
         tamaño++;
     }
 
     @Override
     public void agregarInicio(T dato) {
-        Nodo<T> nuevoNodo = new Nodo<>(dato);
+         Nodo<T> nuevoNodo = new Nodo<>(dato);
+    if (inicio == null) {       
+        inicio = nuevoNodo;
+        fin = nuevoNodo;
+    } else {
         nuevoNodo.setSiguiente(inicio);
         inicio = nuevoNodo;
-        tamaño++;
+    }
+    tamaño++;
     }
 
     @Override
     public void agregarFin(T dato) {
-        agregar(dato);  // Internamente usará el método agregar
+        Nodo<T> nuevoNodo = new Nodo<>(dato);
+    if (inicio == null) {
+        inicio = fin = nuevoNodo; 
+    } else {
+        fin.setSiguiente(nuevoNodo); 
+        fin = nuevoNodo;             
+    }
+    tamaño++;
     }
 
     @Override
-    public boolean eliminar(T dato) {
-        if (inicio == null) {
-            return false;
+public boolean eliminar(T dato) {
+    if (inicio == null) {
+        return false; 
+    }
+
+    // Caso especial: eliminar el primer nodo
+    if (inicio.getDato().equals(dato)) {
+        inicio = inicio.getSiguiente();
+        tamaño--;
+        if (inicio == null) { // Si era el único nodo
+            fin = null;
         }
-        if (inicio.getDato().equals(dato)) {
-            inicio = inicio.getSiguiente();
+        return true;
+    }
+
+    // Búsqueda del nodo a eliminar
+    Nodo<T> actual = inicio;
+    while (actual.getSiguiente() != null) {
+        if (actual.getSiguiente().getDato().equals(dato)) {
+            // Actualizar fin si se elimina el último nodo
+            if (actual.getSiguiente() == fin) {
+                fin = actual;
+            }
+            actual.setSiguiente(actual.getSiguiente().getSiguiente());
             tamaño--;
             return true;
         }
-        Nodo<T> actual = inicio;
-        while (actual.getSiguiente() != null) {
-            if (actual.getSiguiente().getDato().equals(dato)) {
-                actual.setSiguiente(actual.getSiguiente().getSiguiente());
-                tamaño--;
-                return true;
-            }
-            actual = actual.getSiguiente();
-        }
-        return false;
+        actual = actual.getSiguiente();
     }
 
-    @Override
+    return false; 
+}
+   
+
+
+@Override
     public boolean contiene(T dato) {
-        Nodo<T> actual = inicio;
-        while (actual != null) {
-            if (actual.getDato().equals(dato)) {
-                return true;
-            }
-            actual = actual.getSiguiente();
+    Nodo<T> actual = inicio;
+    while (actual != null) {
+        System.out.println("Comparando contra: " + actual.getDato()); // <- Debug
+        if (actual.getDato().equals(dato)) {
+            return true;
         }
-        return false;
+        actual = actual.getSiguiente();
+    }
+    return false;
     }
 
     @Override

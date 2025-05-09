@@ -21,7 +21,8 @@ public class IObligatorioTest {
 
     @Before
     public void setUp() {
-        //Completar para primera entrega
+        //Inicializo el sistema
+        miSistema = new Sistema();
     }
 
     @Test
@@ -30,8 +31,29 @@ public class IObligatorioTest {
     }
 
     @Test
-    public void testRegistrarSala() {
-        //Completar para primera entrega
+    public void testRegistrarSalaOk() {
+        Retorno r = miSistema.registrarSala("El che", 15);
+        assertEquals(Retorno.ok().resultado, r.resultado);
+         r = miSistema.registrarSala("El che2", 1);
+        assertEquals(Retorno.ok().resultado, r.resultado);
+         r = miSistema.registrarSala("El che3", 150);
+        assertEquals(Retorno.ok().resultado, r.resultado);
+    }
+      @Test
+     public void testRegistrarSalaError1() {
+            Retorno r = miSistema.registrarSala("El che", 15);
+        assertEquals(Retorno.ok().resultado, r.resultado);
+          r = miSistema.registrarSala("El che", 15);
+        assertEquals(Retorno.error1().resultado, r.resultado);
+            r = miSistema.registrarSala("", 10);
+        assertEquals(Retorno.error1().resultado, r.resultado);
+    }
+       @Test
+      public void testRegistrarSalaError2() {
+   Retorno r = miSistema.registrarSala("El che4", -15);
+        assertEquals(Retorno.error2().resultado, r.resultado);
+            r = miSistema.registrarSala("El che5", -0);
+        assertEquals(Retorno.error2().resultado, r.resultado);
     }
 
     @Test
