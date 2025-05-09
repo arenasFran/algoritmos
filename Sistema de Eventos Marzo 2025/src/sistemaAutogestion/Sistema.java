@@ -2,11 +2,15 @@ package sistemaAutogestion;
 
 import dominio.Cliente;
 import java.time.LocalDate;
+import tads.IListaSimple;
+import tads.ListaSimple;
+import tads.Nodo;
 
 public class Sistema implements IObligatorio {
-
+     private IListaSimple<Cliente> listaClientes;
+     
     public Sistema(){
-        
+        listaClientes = new ListaSimple<Cliente>();
     }
     
     
@@ -34,15 +38,21 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno registrarCliente(String cedula, String nombre) {
-        
         Cliente c = new Cliente(cedula,nombre);
-        
-        String cedulaStr = String.valueOf(cedula);
-        if(cedulaStr.length() != 8)
+       
+        if(c.getCedula().length() != 8)
         {
             return Retorno.error1();
         }
-        return Retorno.noImplementada();
+        Nodo<Cliente> actual = listaClientes.getInicio();
+        while(actual != null){
+            if(actual.getDato().equals(c)){
+                return Retorno.error2();
+            }
+            actual=actual.getSiguiente();
+        }
+        listaClientes.agregar(c);
+        return Retorno.ok();
     }
 
     @Override
@@ -116,3 +126,4 @@ public class Sistema implements IObligatorio {
     }
 
 }
+

@@ -1,10 +1,14 @@
 package tads;
 
 public interface IListaSimple<T> {
-    void agregarInicio(T dato);
-    void agregarFin(T dato);
-    boolean eliminar(T dato);
-    boolean contiene(T dato);
-    void mostrar();
-    int tamaño();
+    public void agregar(T dato);
+    public void agregarInicio(T dato);
+    public void agregarFin(T dato);
+    public boolean eliminar(T dato);
+    public  boolean contiene(T dato);
+    public void mostrar();
+    public int tamaño();
+    public void esVacia();
+    public void esLLena();
+    public Nodo<T> getInicio();
 }

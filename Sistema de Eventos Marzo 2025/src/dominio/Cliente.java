@@ -30,5 +30,20 @@ public class Cliente {
         
     }
     
-           
+    @Override
+    public boolean equals(Object obj) {
+     if (this == obj) return true;  
+     if (obj == null || this.getClass() != obj.getClass()) return false; 
+
+        Cliente other = (Cliente) obj;
+        return this.getCedula().equals(other.getCedula()); 
+    }
+    
+    @Override
+    public String toString() {
+        // Formato "cedula-nombre"
+        return this.getCedula() + "-" + this.getName();
+    }
 }
+    
+
