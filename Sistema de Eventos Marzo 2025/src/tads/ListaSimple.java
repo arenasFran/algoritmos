@@ -2,6 +2,7 @@ package tads;
 
 public class ListaSimple<T> implements IListaSimple<T> {
     private Nodo<T> inicio;
+    private Nodo<T> fin;
     private int tamaño;
 
     public int getTamaño() {
@@ -14,9 +15,23 @@ public class ListaSimple<T> implements IListaSimple<T> {
 
     public ListaSimple() {
         this.inicio = null;
+        this.fin = null;
         this.tamaño = 0;
     }
-
+        @Override
+        public T obtenerPorIndice(int indice) {
+        if (indice < 0 || indice >= tamaño) {
+            throw new IndexOutOfBoundsException("Índice fuera de rango: " + indice);
+        }
+        
+        Nodo<T> actual = inicio;
+        for (int i = 0; i < indice; i++) {
+            actual = actual.getSiguiente();
+        }
+        return actual.getDato();
+    }
+    
+    
     @Override
     public void agregar(T dato) {
         Nodo<T> nuevoNodo = new Nodo<>(dato);
@@ -111,5 +126,11 @@ public class ListaSimple<T> implements IListaSimple<T> {
 
     public Nodo<T> getInicio() {
         return inicio;
+    }
+      @Override
+    public void vaciar() {
+        inicio = null;
+        fin = null;
+        tamaño = 0;
     }
 }

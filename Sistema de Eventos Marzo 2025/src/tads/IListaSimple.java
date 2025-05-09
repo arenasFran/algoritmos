@@ -10,5 +10,7 @@ public interface IListaSimple<T> {
     public int tamaño();
     public void esVacia();
     public void esLLena();
+    public void vaciar();
     public Nodo<T> getInicio();
+    public T obtenerPorIndice(int indice);
 }

@@ -1,5 +1,7 @@
 
 package dominio;
+import java.time.LocalDate;
+import tads.ListaSimple;
 
 /**
  *
@@ -8,7 +10,12 @@ package dominio;
 public class Sala {
     private String Nombre;
     private int Capacidad;
+    private ListaSimple<LocalDate> fechasOcupadas;
 
+    public ListaSimple<LocalDate> getFechasOcupadas() {
+        return fechasOcupadas;
+    }
+    
     public String getNombre() {
         return Nombre;
     }
@@ -28,5 +35,7 @@ public class Sala {
     public Sala(String nombre, int capacidad){
         this.setNombre(nombre);
         this.setCapacidad(capacidad);
+        this.fechasOcupadas = new ListaSimple<>();
+
     }
 }
