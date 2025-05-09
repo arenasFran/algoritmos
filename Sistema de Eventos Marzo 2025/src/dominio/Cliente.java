@@ -41,7 +41,7 @@ public class Cliente {
     
     @Override
     public String toString() {
-        // Formato "cedula-nombre"
+     
         return this.getCedula() + "-" + this.getName();
     }
 }
