@@ -35,55 +35,56 @@ public class IObligatorioTest {
     }
 
     @Test
-    public void testCrearSistemaDeGestion() {
-        //Completar para primera entrega
+    public void testCrearSistemaDeGestionOk() {
+                Retorno r = miSistema.crearSistemaDeGestion();
+                assertEquals(Retorno.ok().resultado, r.resultado);
     }
+ 
 
     @Test
     public void testRegistrarSalaOk() {
-        Retorno r = miSistema.registrarSala("El che", 15);
+        Retorno r = miSistema.registrarSala("Sala C", 15);
         assertEquals(Retorno.ok().resultado, r.resultado);
-         r = miSistema.registrarSala("El che2", 1);
+         r = miSistema.registrarSala("Sala D", 1);
         assertEquals(Retorno.ok().resultado, r.resultado);
-         r = miSistema.registrarSala("El che3", 150);
+         r = miSistema.registrarSala("Sala E", 150);
         assertEquals(Retorno.ok().resultado, r.resultado);
     }
       @Test
      public void testRegistrarSalaError1() {
-            Retorno r = miSistema.registrarSala("El che", 15);
-        assertEquals(Retorno.ok().resultado, r.resultado);
-          r = miSistema.registrarSala("El che", 15);
+       
+        Retorno  r = miSistema.registrarSala("Sala A", 15);
         assertEquals(Retorno.error1().resultado, r.resultado);
             r = miSistema.registrarSala("", 10);
         assertEquals(Retorno.error1().resultado, r.resultado);
     }
        @Test
       public void testRegistrarSalaError2() {
-   Retorno r = miSistema.registrarSala("El che4", -15);
+   Retorno r = miSistema.registrarSala("Sala Z", -15);
         assertEquals(Retorno.error2().resultado, r.resultado);
-            r = miSistema.registrarSala("El che5", -0);
+            r = miSistema.registrarSala("Sala W", -0);
         assertEquals(Retorno.error2().resultado, r.resultado);
     }
 
     @Test
     public void testEliminarSalaOk() {
-         Retorno r = miSistema.registrarSala("El che", 15);
+         Retorno r = miSistema.registrarSala("Sala Z", 15);
         assertEquals(Retorno.ok().resultado, r.resultado);
-          r = miSistema.eliminarSala("El che");
+          r = miSistema.eliminarSala("Sala Z");
         assertEquals(Retorno.ok().resultado, r.resultado);
             
     }
      @Test
     public void testEliminarSalaError1() {
-      Retorno r = miSistema.registrarSala("El che5", 15);
+      Retorno r = miSistema.registrarSala("Sala Z", 15);
         assertEquals(Retorno.ok().resultado, r.resultado);
-          r = miSistema.eliminarSala("El che55");
+          r = miSistema.eliminarSala("Sala ZZ");
         assertEquals(Retorno.error1().resultado, r.resultado);
     }
 
     @Test
     public void testRegistrarEventoOk() {
-         Retorno r = miSistema.registrarSala("El che5", 15);
+         Retorno r = miSistema.registrarSala("Sala Z", 15);
         assertEquals(Retorno.ok().resultado, r.resultado);
          r = miSistema.registrarEvento("8a96", "Evento politico 1", 15,LocalDate.of(2025,10,7) );
         assertEquals(Retorno.ok().resultado, r.resultado);
@@ -91,7 +92,7 @@ public class IObligatorioTest {
     }
         @Test
     public void testRegistrarEventoError1() {
-         Retorno r = miSistema.registrarSala("El che5", 15);
+         Retorno r = miSistema.registrarSala("Sala Z", 15);
         assertEquals(Retorno.ok().resultado, r.resultado);
         r = miSistema.registrarEvento("8a96", "Evento politico 1", 14,LocalDate.of(2025,10,7) );
         assertEquals(Retorno.ok().resultado, r.resultado);
@@ -100,7 +101,7 @@ public class IObligatorioTest {
     }
         @Test
     public void testRegistrarEventoError2() {
-         Retorno r = miSistema.registrarSala("El che5", 15);
+         Retorno r = miSistema.registrarSala("Sala Z", 15);
         assertEquals(Retorno.ok().resultado, r.resultado);
            r = miSistema.registrarEvento("8a96", "Evento politico 1", -30,LocalDate.of(2025,10,7) );
         assertEquals(Retorno.error2().resultado, r.resultado);

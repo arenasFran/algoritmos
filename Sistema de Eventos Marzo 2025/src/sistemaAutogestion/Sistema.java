@@ -23,7 +23,10 @@ public class Sistema implements IObligatorio {
     
     @Override
     public Retorno crearSistemaDeGestion() {
-        return Retorno.noImplementada();
+        listaClientes = new ListaSimple<Cliente>();
+        listaSalas = new ListaSimple<Sala>();
+        listaEventos = new ListaSimple<Evento>();
+        return Retorno.ok();
     }
 
     @Override
