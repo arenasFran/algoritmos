@@ -50,21 +50,26 @@ public Retorno registrarSala(String nombre, int capacidad) {
     return new Retorno(Retorno.Resultado.OK);
 }
 
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public Retorno eliminarSala(String nombre) {
-        return Retorno.noImplementada();
+    // Validar nombre no nulo o vacío (ERROR_1)
+    if (nombre == null || nombre.trim().isEmpty()) {
+        return new Retorno(Retorno.Resultado.ERROR_1);
     }
+
+    // Crear un objeto temporal para la comparación
+    Sala salaComparacion = new Sala(nombre.trim(), 0);
+    
+    // Verificar si la sala existe en la lista
+    if (!listaSalas.contiene(salaComparacion)) {
+        return new Retorno(Retorno.Resultado.ERROR_1); // No se encontró la sala
+    }
+    
+    // Eliminar la sala de la lista
+    listaSalas.eliminar(salaComparacion);
+    
+    return new Retorno(Retorno.Resultado.OK); // Sala eliminada correctamente
+}
 
     @Override
     public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {

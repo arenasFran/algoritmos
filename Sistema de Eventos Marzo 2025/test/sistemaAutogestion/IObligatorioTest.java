@@ -57,8 +57,19 @@ public class IObligatorioTest {
     }
 
     @Test
-    public void testEliminarSala() {
-        //Completar para primera entrega
+    public void testEliminarSalaOk() {
+         Retorno r = miSistema.registrarSala("El che", 15);
+        assertEquals(Retorno.ok().resultado, r.resultado);
+          r = miSistema.eliminarSala("El che");
+        assertEquals(Retorno.ok().resultado, r.resultado);
+            
+    }
+     @Test
+    public void testEliminarSalaError1() {
+      Retorno r = miSistema.registrarSala("El che5", 15);
+        assertEquals(Retorno.ok().resultado, r.resultado);
+          r = miSistema.eliminarSala("El che55");
+        assertEquals(Retorno.error1().resultado, r.resultado);
     }
 
     @Test
