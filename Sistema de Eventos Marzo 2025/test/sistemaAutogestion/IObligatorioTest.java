@@ -145,7 +145,28 @@ public class IObligatorioTest {
 
     @Test
     public void testEsSalaOptima() {
-        //Completar para primera entrega
-    }
+    // Preparamos una matriz como en el ejemplo del enunciado
+    String[][] vistaSala = {
+        {"#", "#", "#", "#", "#", "#", "#"},
+        {"#", "#", "X", "X", "X", "X", "#"},
+        {"#", "O", "O", "X", "X", "X", "#"},
+        {"#", "O", "O", "O", "O", "X", "#"},
+        {"#", "O", "O", "X", "O", "O", "#"},
+        {"#", "O", "O", "O", "O", "O", "#"},
+        {"#", "X", "X", "O", "O", "O", "O"},
+        {"#", "X", "X", "O", "O", "O", "X"},
+        {"#", "X", "X", "O", "X", "X", "#"},
+        {"#", "X", "X", "O", "X", "X", "#"},
+        {"#", "#", "#", "O", "#", "#", "#"},
+        {"#", "#", "#", "O", "#", "#", "#"},
+    };
+
+    Retorno r = miSistema.esSalaOptima(vistaSala);
+
+    assertEquals(Retorno.ok().resultado, r.resultado);
+
+    assertTrue(r.valorString.contains("Es óptimo"));
+}
+
 
 }

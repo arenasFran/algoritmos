@@ -220,9 +220,50 @@ public class Sistema implements IObligatorio {
     }
 
     @Override
-    public Retorno esSalaOptima(String[][] vistaSala) {
-        return Retorno.noImplementada();
+
+    public Retorno esSalaOptima(String vistaSala[][]) {
+    if (vistaSala == null || vistaSala.length == 0 || vistaSala[0].length == 0) {
+        return Retorno.error1();
     }
+
+    int filas = vistaSala.length;
+    int columnas = vistaSala[0].length;
+
+    int columnasOptimas = 0;
+
+    for (int c = 0; c < columnas; c++) {
+        int maxOcupadosConsecutivos = 0;
+        int ocupadosConsecutivosActual = 0;
+        int libres = 0;
+
+        for (int f = 0; f < filas; f++) {
+            String celda = vistaSala[f][c];
+
+            if (celda.equals("#")) {
+                ocupadosConsecutivosActual = 0; // límite, reinicia
+            } else if (celda.equals("O")) {
+                ocupadosConsecutivosActual++;
+                if (ocupadosConsecutivosActual > maxOcupadosConsecutivos) {
+                    maxOcupadosConsecutivos = ocupadosConsecutivosActual;
+                }
+            } else if (celda.equals("X")) {
+                libres++;
+                ocupadosConsecutivosActual = 0; // rompe la racha
+            }
+        }
+
+        if (maxOcupadosConsecutivos > libres) {
+            columnasOptimas++;
+        }
+    }
+
+    if (columnasOptimas >= 2) {
+        return Retorno.ok("Es óptimo");
+    } else {
+        return Retorno.ok("No es óptimo");
+    }
+}
+
 
     @Override
     public Retorno listarClientesDeEvento(String código, int n) {
