@@ -76,7 +76,7 @@ public class ListaSimple<T> implements IListaSimple<T> {
     }
 
     @Override
-public boolean eliminar(T dato) {
+    public boolean eliminar(T dato) {
     if (inicio == null) {
         return false; 
     }
@@ -108,6 +108,14 @@ public boolean eliminar(T dato) {
 
     return false; 
 }
+
+    public void setInicio(Nodo<T> inicio) {
+        this.inicio = inicio;
+    }
+
+    public void setFin(Nodo<T> fin) {
+        this.fin = fin;
+    }
    
 
 

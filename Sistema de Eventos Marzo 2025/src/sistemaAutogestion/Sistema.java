@@ -27,7 +27,7 @@ public class Sistema implements IObligatorio {
     }
 
 @Override
-public Retorno registrarSala(String nombre, int capacidad) {
+    public Retorno registrarSala(String nombre, int capacidad) {
     // Validar capacidad (ERROR_2)
     if (capacidad <= 0) {
         return new Retorno(Retorno.Resultado.ERROR_2);
@@ -48,7 +48,7 @@ public Retorno registrarSala(String nombre, int capacidad) {
     
     // Crear y agregar la nueva sala
     Sala nuevaSala = new Sala(nombre.trim(), capacidad);
-    listaSalas.agregarFin(nuevaSala);
+    listaSalas.agregarInicio(nuevaSala);
     
     return new Retorno(Retorno.Resultado.OK);
 }
@@ -117,22 +117,41 @@ public Retorno registrarSala(String nombre, int capacidad) {
     
     @Override
     public Retorno registrarCliente(String cedula, String nombre) {
-        Cliente c = new Cliente(cedula,nombre);
-       
-        if(c.getCedula().length() != 8)
-        {
-            return Retorno.error1();
-        }
-        Nodo<Cliente> actual = listaClientes.getInicio();
-        while(actual != null){
-            if(actual.getDato().equals(c)){
-                return Retorno.error2();
-            }
-            actual=actual.getSiguiente();
-        }
-        listaClientes.agregar(c);
-        return Retorno.ok();
+    Cliente c = new Cliente(cedula, nombre);
+
+    if (cedula.length() != 8) {
+        return Retorno.error1();
     }
+
+    // Verificar si ya existe
+    Nodo<Cliente> actual = listaClientes.getInicio();
+    while (actual != null) {
+        if (actual.getDato().equals(c)) {
+            return Retorno.error2();
+        }
+        actual = actual.getSiguiente();
+    }
+
+    // Insertar ordenadamente por cédula (ascendente)
+    Nodo<Cliente> nuevoNodo = new Nodo<>(c);
+    if (listaClientes.getInicio() == null || 
+        c.compareTo(listaClientes.getInicio().getDato()) < 0) {
+        // Insertar al principio
+        nuevoNodo.setSiguiente(listaClientes.getInicio());
+        listaClientes.setInicio(nuevoNodo);
+    } else {
+        // Buscar posición
+        Nodo<Cliente> anterior = listaClientes.getInicio();
+        while (anterior.getSiguiente() != null && 
+               c.compareTo(anterior.getSiguiente().getDato()) > 0) {
+            anterior = anterior.getSiguiente();
+        }
+        nuevoNodo.setSiguiente(anterior.getSiguiente());
+        anterior.setSiguiente(nuevoNodo);
+    }
+
+    return Retorno.ok();
+}
 
     @Override
     public Retorno comprarEntrada(String cedula, String codigoEvento) {
@@ -187,7 +206,19 @@ public Retorno registrarSala(String nombre, int capacidad) {
 
     @Override
     public Retorno listarClientes() {
-        return Retorno.noImplementada();
+        Nodo<Cliente> actual = listaClientes.getInicio();
+        
+        while(actual != null)
+        {
+            System.out.print(actual.getDato());
+            if(actual.getSiguiente() != null)
+            {
+               System.out.print('#');
+            }
+            actual = actual.getSiguiente();
+        }
+
+        return Retorno.ok();
     }
 
     @Override

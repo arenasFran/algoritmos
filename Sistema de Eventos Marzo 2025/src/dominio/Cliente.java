@@ -1,49 +1,52 @@
-
 package dominio;
 
+public class Cliente implements Comparable<Cliente> {
+    private String name;
+    private String cedula;
 
-public class Cliente {
-    private String Name;
-    String Cedula; 
-
-    public String getName() {
-        return Name;
+    public Cliente(String name, String cedula) {
+        this.name = name;
+        this.cedula = cedula;
     }
 
-    public void setName(String Name) {
-        this.Name = Name;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCedula() {
-        return Cedula;
+        return cedula;
     }
 
-    public void setCedula(String Cedula) {
-        this.Cedula = Cedula;
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
     }
-    
 
-    public Cliente(String name,String cedula)
-    {
-        this.setName(name);
-        this.setCedula(cedula);
-        
-    }
-    
     @Override
     public boolean equals(Object obj) {
-     if (this == obj) return true;  
-     if (obj == null || this.getClass() != obj.getClass()) return false; 
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
 
         Cliente other = (Cliente) obj;
-        return this.getCedula().equals(other.getCedula()); 
+        return this.cedula.equals(other.getCedula());
     }
-    
+
     @Override
     public String toString() {
-     
-        return this.getCedula() + "-" + this.getName();
+        return this.cedula + "-" + this.name;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.cedula.hashCode();
+    }
+
+    @Override
+    public int compareTo(Cliente otro) {
+        return this.cedula.compareTo(otro.cedula);
     }
 }
-    
-

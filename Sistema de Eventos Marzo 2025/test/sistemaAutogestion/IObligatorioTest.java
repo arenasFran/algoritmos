@@ -4,6 +4,7 @@
  */
 package sistemaAutogestion;
 
+import dominio.Sala;
 import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +25,7 @@ public class IObligatorioTest {
     public void setUp() {
         //Inicializo el sistema
         miSistema = new Sistema();
+        
     }
 
     @Test
@@ -107,12 +109,20 @@ public class IObligatorioTest {
 
     @Test
     public void testRegistrarCliente() {
-        //Completar para primera entrega
+        Retorno r = miSistema.registrarCliente("12345678", "Gerald Rivia");
+        assertEquals(Retorno.ok().resultado,r.resultado);
+        
+        r= miSistema.registrarCliente("21321", "Alastor Moody");
+        assertEquals(Retorno.error1().resultado,r.resultado);
+        
+        
+        // registrar con la misma cedula
+       
     }
 
     @Test
     public void testListarSalas() {
-        //Completar para primera entrega
+    
     }
 
     @Test
@@ -122,7 +132,6 @@ public class IObligatorioTest {
 
     @Test
     public void testListarClientes() {
-        //Completar para primera entrega
     }
 
     @Test
