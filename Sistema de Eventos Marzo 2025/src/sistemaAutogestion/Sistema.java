@@ -82,6 +82,16 @@ public class Sistema implements IObligatorio {
         return new Retorno(Retorno.Resultado.ERROR_2);  // Aforo no válido
     }
 
+    
+        // Validar fecha (día entre 1-30, mes entre 1-12)
+
+    if (fecha.getDayOfMonth() < 1 || fecha.getDayOfMonth() > 30 || 
+        fecha.getMonthValue() < 1 || fecha.getMonthValue() > 12) {
+        return new Retorno(Retorno.Resultado.ERROR_3);  // Fecha inválida
+    }
+
+    
+    
     // Verificar duplicado
     for (int i = 0; i < listaEventos.tamaño(); i++) {
         Evento evento = listaEventos.obtenerPorIndice(i);
