@@ -88,7 +88,11 @@ public class IObligatorioTest {
     public void testRegistrarEventoOk() {
         Retorno r = miSistema.registrarSala("Sala Z", 15);
         assertEquals(Retorno.ok().resultado, r.resultado);
+        r = miSistema.registrarSala("Sala test", 40);
+        assertEquals(Retorno.ok().resultado, r.resultado);
         r = miSistema.registrarEvento("8a96", "Evento politico 1", 15, LocalDate.of(2025, 10, 7));
+        assertEquals(Retorno.ok().resultado, r.resultado);
+        r = miSistema.registrarEvento("8a77", "Evento politico 2", 39, LocalDate.of(2025, 10, 7));
         assertEquals(Retorno.ok().resultado, r.resultado);
 
     }

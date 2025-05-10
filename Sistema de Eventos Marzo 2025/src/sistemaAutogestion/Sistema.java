@@ -41,7 +41,7 @@ public class Sistema implements IObligatorio {
         }
 
         // Crear objeto temporal para comparación
-        Sala salaComparacion = new Sala(nombre.trim(), 0); // La capacidad no importa para la comparación
+        Sala salaComparacion = new Sala(nombre.trim(), 0); 
 
         // Verificar si ya existe una sala con ese nombre usando contiene()
         if (listaSalas.contiene(salaComparacion)) {
@@ -77,42 +77,63 @@ public class Sistema implements IObligatorio {
     }
 
     @Override
-    public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {
-        if (aforoNecesario <= 0) {
-            return new Retorno(Retorno.Resultado.ERROR_2);  // Aforo no válido
-        }
-
-        // Verificar duplicado
-        for (int i = 0; i < listaEventos.tamaño(); i++) {
-            Evento evento = listaEventos.obtenerPorIndice(i);
-            if (evento.getCodigo().equals(codigo)) {
-                return new Retorno(Retorno.Resultado.ERROR_1);  // Ya existe
-            }
-        }
-
-        // Buscar sala disponible
-        Sala salaAsignada = null;
-        for (int i = 0; i < listaSalas.tamaño(); i++) {
-            Sala sala = listaSalas.obtenerPorIndice(i);
-            if (sala.getCapacidad() >= aforoNecesario && !sala.getFechasOcupadas().contiene(fecha)) {
-                salaAsignada = sala;
-                break;
-            }
-        }
-
-        if (salaAsignada == null) {
-            return new Retorno(Retorno.Resultado.ERROR_3);  // Sin salas
-        }
-
-        // Marcar fecha como ocupada en la sala asignada
-        salaAsignada.getFechasOcupadas().agregar(fecha);
-
-        // Crear y registrar evento
-        Evento nuevoEvento = new Evento(codigo, descripcion, aforoNecesario, fecha, salaAsignada);
-        listaEventos.agregarFin(nuevoEvento);
-
-        return new Retorno(Retorno.Resultado.OK);
+  public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {
+    if (aforoNecesario <= 0) {
+        return new Retorno(Retorno.Resultado.ERROR_2);  // Aforo no válido
     }
+
+    // Verificar duplicado
+    for (int i = 0; i < listaEventos.tamaño(); i++) {
+        Evento evento = listaEventos.obtenerPorIndice(i);
+        if (evento.getCodigo().equals(codigo)) {
+            return new Retorno(Retorno.Resultado.ERROR_1);  // Ya existe
+        }
+    }
+
+    // Buscar sala disponible más pequeña que cumpla con el aforo
+int menorCapacidad = 0;
+for (int i = 0; i < listaSalas.tamaño(); i++) {
+    menorCapacidad += listaSalas.obtenerPorIndice(i).getCapacidad();
+}
+menorCapacidad += 1; // Asegurar que sea mayor que cualquier capacidad individual
+
+Sala salaAsignada = null;
+for (int i = 0; i < listaSalas.tamaño(); i++) {
+    Sala sala = listaSalas.obtenerPorIndice(i);
+    if (sala.getCapacidad() >= aforoNecesario && !sala.getFechasOcupadas().contiene(fecha)) {
+        if (sala.getCapacidad() < menorCapacidad) {
+            salaAsignada = sala;
+            menorCapacidad = sala.getCapacidad();
+        }
+    }
+}
+    
+    for (int i = 0; i < listaSalas.tamaño(); i++) {
+        Sala sala = listaSalas.obtenerPorIndice(i);
+        if (sala.getCapacidad() >= aforoNecesario && 
+            !sala.getFechasOcupadas().contiene(fecha)) {
+            
+            // Si encontramos una sala con menor capacidad que la actual asignada
+            if (sala.getCapacidad() < menorCapacidad) {
+                salaAsignada = sala;
+                menorCapacidad = sala.getCapacidad();
+            }
+        }
+    }
+
+    if (salaAsignada == null) {
+        return new Retorno(Retorno.Resultado.ERROR_3);  // Sin salas disponibles
+    }
+
+    // Marcar fecha como ocupada en la sala asignada
+    salaAsignada.getFechasOcupadas().agregar(fecha);
+
+    // Crear y registrar evento
+    Evento nuevoEvento = new Evento(codigo, descripcion, aforoNecesario, fecha, salaAsignada);
+    listaEventos.agregarFin(nuevoEvento);
+
+    return new Retorno(Retorno.Resultado.OK);
+}
 
     @Override
     public Retorno registrarCliente(String cedula, String nombre) {
