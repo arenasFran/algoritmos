@@ -4,6 +4,7 @@
  */
 package sistemaAutogestion;
 
+import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -73,8 +74,35 @@ public class IObligatorioTest {
     }
 
     @Test
-    public void testRegistrarEvento() {
-        //Completar para primera entrega
+    public void testRegistrarEventoOk() {
+         Retorno r = miSistema.registrarSala("El che5", 15);
+        assertEquals(Retorno.ok().resultado, r.resultado);
+         r = miSistema.registrarEvento("8a96", "Evento politico 1", 15,LocalDate.of(2025,10,7) );
+        assertEquals(Retorno.ok().resultado, r.resultado);
+       
+    }
+        @Test
+    public void testRegistrarEventoError1() {
+         Retorno r = miSistema.registrarSala("El che5", 15);
+        assertEquals(Retorno.ok().resultado, r.resultado);
+        r = miSistema.registrarEvento("8a96", "Evento politico 1", 14,LocalDate.of(2025,10,7) );
+        assertEquals(Retorno.ok().resultado, r.resultado);
+        r = miSistema.registrarEvento("8a96", "Evento politico 1", 14,LocalDate.of(2025,10,7) );
+        assertEquals(Retorno.error1().resultado, r.resultado);
+    }
+        @Test
+    public void testRegistrarEventoError2() {
+         Retorno r = miSistema.registrarSala("El che5", 15);
+        assertEquals(Retorno.ok().resultado, r.resultado);
+           r = miSistema.registrarEvento("8a96", "Evento politico 1", -30,LocalDate.of(2025,10,7) );
+        assertEquals(Retorno.error2().resultado, r.resultado);
+    }
+        @Test
+    public void testRegistrarEventoError3() {
+              Retorno r = miSistema.registrarEvento("8a96", "Evento politico 1", 30,LocalDate.of(2025,10,7) );
+        assertEquals(Retorno.error3().resultado, r.resultado);
+         r = miSistema.registrarEvento("8a95", "Evento politico 3", 40,LocalDate.of(2025,10,6) );
+        assertEquals(Retorno.error3().resultado, r.resultado);
     }
 
     @Test

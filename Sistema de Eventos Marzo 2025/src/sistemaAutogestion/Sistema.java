@@ -1,6 +1,7 @@
 package sistemaAutogestion;
 
 import dominio.Cliente;
+import dominio.Evento;
 import dominio.Sala;
 import java.time.LocalDate;
 import tads.IListaSimple;
@@ -10,10 +11,12 @@ import tads.Nodo;
 public class Sistema implements IObligatorio {
      private IListaSimple<Cliente> listaClientes;
      private IListaSimple<Sala> listaSalas;
+     private IListaSimple<Evento> listaEventos;
     
      public Sistema(){
         listaClientes = new ListaSimple<Cliente>();
         listaSalas = new ListaSimple<Sala>();
+        listaEventos = new ListaSimple<Evento>();
     }
     
   
@@ -50,8 +53,8 @@ public Retorno registrarSala(String nombre, int capacidad) {
     return new Retorno(Retorno.Resultado.OK);
 }
 
-    @Override
-    public Retorno eliminarSala(String nombre) {
+@Override
+public Retorno eliminarSala(String nombre) {
     // Validar nombre no nulo o vacío (ERROR_1)
     if (nombre == null || nombre.trim().isEmpty()) {
         return new Retorno(Retorno.Resultado.ERROR_1);
@@ -72,10 +75,46 @@ public Retorno registrarSala(String nombre, int capacidad) {
 }
 
     @Override
-    public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {
-        return Retorno.noImplementada();
+public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {
+    // Validar aforo necesario
+    if (aforoNecesario <= 0) {
+        return new Retorno(Retorno.Resultado.ERROR_2);  // Error 2: Aforo no válido
     }
 
+    // Verificar si ya existe un evento con el mismo código
+    for (int i = 0; i < listaEventos.tamaño(); i++) {
+        Evento evento = listaEventos.obtenerPorIndice(i);
+        if (evento.getCodigo().equals(codigo)) {
+            return new Retorno(Retorno.Resultado.ERROR_1);  // Error 1: Evento ya existe
+        }
+    }
+
+    // Buscar una sala disponible
+    Sala salaAsignada = null;
+    for (int i = 0; i < listaSalas.tamaño(); i++) {  // Recorrer la lista de salas
+        Sala sala = listaSalas.obtenerPorIndice(i);
+        if (sala.getCapacidad() >= aforoNecesario && !sala.getFechasOcupadas().contiene(fecha)) {
+            salaAsignada = sala;
+            break;  // Encontramos una sala adecuada
+        }
+    }
+
+    // Si no hay una sala disponible
+    if (salaAsignada == null) {
+        return new Retorno(Retorno.Resultado.ERROR_3);  // Error 3: No hay salas disponibles
+    }
+
+    // Crear y registrar el evento
+    Evento nuevoEvento = new Evento(codigo, descripcion, aforoNecesario, fecha, salaAsignada);
+    listaEventos.agregarFin(nuevoEvento);  // Agregar el evento a la lista de eventos
+
+    return new Retorno(Retorno.Resultado.OK);  // Registro exitoso
+}
+
+
+    
+    
+    
     @Override
     public Retorno registrarCliente(String cedula, String nombre) {
         Cliente c = new Cliente(cedula,nombre);
