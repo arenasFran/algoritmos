@@ -28,8 +28,8 @@ public class IObligatorioTest {
         miSistema = new Sistema();
         miSistema.registrarSala("Sala A", 10);
         miSistema.registrarSala("Sala B", 20);
-        miSistema.registrarEvento("17A98", "Evento politico A", 10,LocalDate.of(2025,10,7));
-        miSistema.registrarEvento("16B97", "Evento politico B", 19,LocalDate.of(2025,10,7));
+        miSistema.registrarEvento("17A98", "Evento politico A", 19,LocalDate.of(2025,10,7));
+        miSistema.registrarEvento("16B97", "Evento politico B", 8,LocalDate.of(2025,10,7));
         miSistema.registrarCliente("1235678", "Pedro Alfonso");
         miSistema.registrarCliente("72829292", "Ryan McLaren");
         

@@ -77,41 +77,42 @@ public class Sistema implements IObligatorio {
     return new Retorno(Retorno.Resultado.OK); // Sala eliminada correctamente
 }
 
-    @Override
-    public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {
-    // Validar aforo necesario
+@Override
+public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {
     if (aforoNecesario <= 0) {
-        return new Retorno(Retorno.Resultado.ERROR_2);  // Error 2: Aforo no válido
+        return new Retorno(Retorno.Resultado.ERROR_2);  // Aforo no válido
     }
 
-    // Verificar si ya existe un evento con el mismo código
+    // Verificar duplicado
     for (int i = 0; i < listaEventos.tamaño(); i++) {
         Evento evento = listaEventos.obtenerPorIndice(i);
         if (evento.getCodigo().equals(codigo)) {
-            return new Retorno(Retorno.Resultado.ERROR_1);  // Error 1: Evento ya existe
+            return new Retorno(Retorno.Resultado.ERROR_1);  // Ya existe
         }
     }
 
-    // Buscar una sala disponible
+    // Buscar sala disponible
     Sala salaAsignada = null;
-    for (int i = 0; i < listaSalas.tamaño(); i++) {  // Recorrer la lista de salas
+    for (int i = 0; i < listaSalas.tamaño(); i++) {
         Sala sala = listaSalas.obtenerPorIndice(i);
         if (sala.getCapacidad() >= aforoNecesario && !sala.getFechasOcupadas().contiene(fecha)) {
             salaAsignada = sala;
-            break;  // Encontramos una sala adecuada
+            break;
         }
     }
 
-    // Si no hay una sala disponible
     if (salaAsignada == null) {
-        return new Retorno(Retorno.Resultado.ERROR_3);  // Error 3: No hay salas disponibles
+        return new Retorno(Retorno.Resultado.ERROR_3);  // Sin salas
     }
 
-    // Crear y registrar el evento
-    Evento nuevoEvento = new Evento(codigo, descripcion, aforoNecesario, fecha, salaAsignada);
-    listaEventos.agregarFin(nuevoEvento);  // Agregar el evento a la lista de eventos
+    // Marcar fecha como ocupada en la sala asignada
+    salaAsignada.getFechasOcupadas().agregar(fecha);
 
-    return new Retorno(Retorno.Resultado.OK);  // Registro exitoso
+    // Crear y registrar evento
+    Evento nuevoEvento = new Evento(codigo, descripcion, aforoNecesario, fecha, salaAsignada);
+    listaEventos.agregarFin(nuevoEvento);
+
+    return new Retorno(Retorno.Resultado.OK);
 }
 
 
@@ -242,24 +243,21 @@ public Retorno listarEventos() {
     }
 
     // Paso 3: Construir el string de retorno
-    StringBuilder salida = new StringBuilder();
+ String salida = "";
     for (int i = 0; i < eventosOrdenados.tamaño(); i++) {
-        Evento evento = eventosOrdenados.obtenerPorIndice(i);
-        String codigo = evento.getCodigo();
-        String descripcion = evento.getDescripcion();
-        String sala = evento.getSalaAsignada().getNombre();
-        int capacidad = evento.getSalaAsignada().getCapacidad();
-        int vendidas = evento.getEntradasVendidas() == null ? 0 : evento.getEntradasVendidas().tamaño();
-        int disponibles = capacidad - vendidas;
+        Evento ev = eventosOrdenados.obtenerPorIndice(i);
+        int capacidadTotal = ev.getSalaAsignada().getCapacidad();
+        int vendidas = (ev.getEntradasVendidas() != null) ? ev.getEntradasVendidas().tamaño() : 0;
+        int disponibles = capacidadTotal - vendidas;
 
-        salida.append("Código: ").append(codigo)
-              .append(" | Descripción: ").append(descripcion)
-              .append(" | Sala: ").append(sala)
-              .append(" | Entradas disponibles: ").append(disponibles)
-              .append(" | Entradas vendidas: ").append(vendidas)
-              .append("\n");
+        salida += "Código: " + ev.getCodigo() + "\n";
+        salida += "Descripción: " + ev.getDescripcion() + "\n";
+        salida += "Sala asignada: " + ev.getSalaAsignada().getNombre() + "\n";
+        salida += "Entradas disponibles: " + disponibles + "\n";
+        salida += "Entradas vendidas: " + vendidas + "\n";
+        salida += "-------------------------\n";
     }
-
+    System.out.println(salida); // <---Debug
     return new Retorno(Retorno.Resultado.OK, salida.toString().trim());
 }
 

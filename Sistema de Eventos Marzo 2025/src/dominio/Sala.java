@@ -52,7 +52,7 @@ public class Sala {
     if (this.getNombre() == null || sala.getNombre() == null) return false;
 
     boolean iguales = this.getNombre().trim().equalsIgnoreCase(sala.getNombre().trim());
-    System.out.println("Comparando: '" + this.getNombre() + "' con '" + sala.getNombre() + "' => " + iguales);
+    
     return iguales;
 }
     

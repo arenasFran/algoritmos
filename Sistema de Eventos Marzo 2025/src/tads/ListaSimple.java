@@ -123,7 +123,7 @@ public class ListaSimple<T> implements IListaSimple<T> {
     public boolean contiene(T dato) {
     Nodo<T> actual = inicio;
     while (actual != null) {
-        System.out.println("Comparando contra: " + actual.getDato()); // <- Debug
+        
         if (actual.getDato().equals(dato)) {
             return true;
         }
