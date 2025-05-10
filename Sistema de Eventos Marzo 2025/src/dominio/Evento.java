@@ -1,4 +1,3 @@
-
 package dominio;
 
 import java.time.LocalDate;
@@ -9,15 +8,15 @@ import tads.ListaSimple;
  * @author frana
  */
 public class Evento {
-   private String codigo;
-   private String descripcion;
-   private int aforoNecesario;
-   private LocalDate fecha;   
-   private Sala salaAsignada;
-   private ListaSimple<Entrada> entradasVendidas;
 
-   
-  public Evento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha, Sala salaAsignada) {
+    private String codigo;
+    private String descripcion;
+    private int aforoNecesario;
+    private LocalDate fecha;
+    private Sala salaAsignada;
+    private ListaSimple<Entrada> entradasVendidas;
+
+    public Evento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha, Sala salaAsignada) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.aforoNecesario = aforoNecesario;
@@ -29,9 +28,8 @@ public class Evento {
     public void setEntradasVendidas(ListaSimple<Entrada> entradasVendidas) {
         this.entradasVendidas = entradasVendidas;
     }
-  
-  
-   public String getCodigo() {
+
+    public String getCodigo() {
         return codigo;
     }
 
@@ -73,8 +71,7 @@ public class Evento {
 
     public ListaSimple<Entrada> getEntradasVendidas() {
         return entradasVendidas;
-  
+
     }
-    
-  
+
 }

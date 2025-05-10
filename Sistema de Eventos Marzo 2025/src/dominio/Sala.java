@@ -1,5 +1,5 @@
-
 package dominio;
+
 import java.time.LocalDate;
 import tads.ListaSimple;
 
@@ -8,6 +8,7 @@ import tads.ListaSimple;
  * @author frana
  */
 public class Sala {
+
     private String Nombre;
     private int Capacidad;
     private ListaSimple<LocalDate> fechasOcupadas;
@@ -19,7 +20,7 @@ public class Sala {
     public ListaSimple<LocalDate> getFechasOcupadas() {
         return fechasOcupadas;
     }
-    
+
     public String getNombre() {
         return Nombre;
     }
@@ -35,30 +36,36 @@ public class Sala {
     public void setCapacidad(int Capacidad) {
         this.Capacidad = Capacidad;
     }
-    
-    public Sala(String nombre, int capacidad){
+
+    public Sala(String nombre, int capacidad) {
         this.setNombre(nombre);
         this.setCapacidad(capacidad);
         this.fechasOcupadas = new ListaSimple<>();
 
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
 
-    Sala sala = (Sala) obj;
-    if (this.getNombre() == null || sala.getNombre() == null) return false;
+        Sala sala = (Sala) obj;
+        if (this.getNombre() == null || sala.getNombre() == null) {
+            return false;
+        }
 
-    boolean iguales = this.getNombre().trim().equalsIgnoreCase(sala.getNombre().trim());
-    
-    return iguales;
-}
-    
+        boolean iguales = this.getNombre().trim().equalsIgnoreCase(sala.getNombre().trim());
+
+        return iguales;
+    }
+
     @Override
     public String toString() {
-    return Nombre + "-" + Capacidad;
+        return Nombre + "-" + Capacidad;
     }
 
     @Override

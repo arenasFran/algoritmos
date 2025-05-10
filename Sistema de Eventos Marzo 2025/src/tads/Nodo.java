@@ -1,10 +1,9 @@
-
 package tads;
 
+public class Nodo<T> {
 
-public class Nodo<T>{
     T dato;
-    Nodo<T> siguiente;  
+    Nodo<T> siguiente;
 
     public Nodo(T dato) {
         this.dato = dato;
@@ -26,7 +25,5 @@ public class Nodo<T>{
     public void setSiguiente(Nodo<T> siguiente) {
         this.siguiente = siguiente;
     }
-    
-    
-   
+
 }

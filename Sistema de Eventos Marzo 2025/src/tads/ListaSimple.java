@@ -1,6 +1,7 @@
 package tads;
 
 public class ListaSimple<T> implements IListaSimple<T> {
+
     private Nodo<T> inicio;
     private Nodo<T> fin;
     private int tamaño;
@@ -13,30 +14,25 @@ public class ListaSimple<T> implements IListaSimple<T> {
         this.tamaño = tamaño;
     }
 
-    
-
     public ListaSimple() {
         this.inicio = null;
         this.fin = null;
         this.tamaño = 0;
     }
-    
 
-    
-        @Override
-        public T obtenerPorIndice(int indice) {
+    @Override
+    public T obtenerPorIndice(int indice) {
         if (indice < 0 || indice >= tamaño) {
             throw new IndexOutOfBoundsException("Índice fuera de rango: " + indice);
         }
-        
+
         Nodo<T> actual = inicio;
         for (int i = 0; i < indice; i++) {
             actual = actual.getSiguiente();
         }
         return actual.getDato();
     }
-    
-    
+
     @Override
     public void agregar(T dato) {
         Nodo<T> nuevoNodo = new Nodo<>(dato);
@@ -44,70 +40,70 @@ public class ListaSimple<T> implements IListaSimple<T> {
             inicio = nuevoNodo;
             fin = nuevoNodo;
         } else {
-        fin.setSiguiente(nuevoNodo);
-        fin = nuevoNodo;
+            fin.setSiguiente(nuevoNodo);
+            fin = nuevoNodo;
         }
         tamaño++;
     }
 
     @Override
     public void agregarInicio(T dato) {
-         Nodo<T> nuevoNodo = new Nodo<>(dato);
-    if (inicio == null) {       
-        inicio = nuevoNodo;
-        fin = nuevoNodo;
-    } else {
-        nuevoNodo.setSiguiente(inicio);
-        inicio = nuevoNodo;
-    }
-    tamaño++;
+        Nodo<T> nuevoNodo = new Nodo<>(dato);
+        if (inicio == null) {
+            inicio = nuevoNodo;
+            fin = nuevoNodo;
+        } else {
+            nuevoNodo.setSiguiente(inicio);
+            inicio = nuevoNodo;
+        }
+        tamaño++;
     }
 
     @Override
     public void agregarFin(T dato) {
         Nodo<T> nuevoNodo = new Nodo<>(dato);
-    if (inicio == null) {
-        inicio = fin = nuevoNodo; 
-    } else {
-        fin.setSiguiente(nuevoNodo); 
-        fin = nuevoNodo;             
-    }
-    tamaño++;
+        if (inicio == null) {
+            inicio = fin = nuevoNodo;
+        } else {
+            fin.setSiguiente(nuevoNodo);
+            fin = nuevoNodo;
+        }
+        tamaño++;
     }
 
     @Override
     public boolean eliminar(T dato) {
-    if (inicio == null) {
-        return false; 
-    }
-
-    // Caso especial: eliminar el primer nodo
-    if (inicio.getDato().equals(dato)) {
-        inicio = inicio.getSiguiente();
-        tamaño--;
-        if (inicio == null) { // Si era el único nodo
-            fin = null;
+        if (inicio == null) {
+            return false;
         }
-        return true;
-    }
 
-    // Búsqueda del nodo a eliminar
-    Nodo<T> actual = inicio;
-    while (actual.getSiguiente() != null) {
-        if (actual.getSiguiente().getDato().equals(dato)) {
-            // Actualizar fin si se elimina el último nodo
-            if (actual.getSiguiente() == fin) {
-                fin = actual;
-            }
-            actual.setSiguiente(actual.getSiguiente().getSiguiente());
+        // Caso especial: eliminar el primer nodo
+        if (inicio.getDato().equals(dato)) {
+            inicio = inicio.getSiguiente();
             tamaño--;
+            if (inicio == null) { // Si era el único nodo
+                fin = null;
+            }
             return true;
         }
-        actual = actual.getSiguiente();
-    }
 
-    return false; 
-}
+        // Búsqueda del nodo a eliminar
+        Nodo<T> actual = inicio;
+        while (actual.getSiguiente() != null) {
+            if (actual.getSiguiente().getDato().equals(dato)) {
+                // Actualizar fin si se elimina el último nodo
+                if (actual.getSiguiente() == fin) {
+                    fin = actual;
+                }
+                actual.setSiguiente(actual.getSiguiente().getSiguiente());
+                tamaño--;
+                return true;
+            }
+            actual = actual.getSiguiente();
+        }
+
+        return false;
+    }
 
     public void setInicio(Nodo<T> inicio) {
         this.inicio = inicio;
@@ -116,20 +112,18 @@ public class ListaSimple<T> implements IListaSimple<T> {
     public void setFin(Nodo<T> fin) {
         this.fin = fin;
     }
-   
 
-
-@Override
+    @Override
     public boolean contiene(T dato) {
-    Nodo<T> actual = inicio;
-    while (actual != null) {
-        
-        if (actual.getDato().equals(dato)) {
-            return true;
+        Nodo<T> actual = inicio;
+        while (actual != null) {
+
+            if (actual.getDato().equals(dato)) {
+                return true;
+            }
+            actual = actual.getSiguiente();
         }
-        actual = actual.getSiguiente();
-    }
-    return false;
+        return false;
     }
 
     @Override
@@ -165,7 +159,8 @@ public class ListaSimple<T> implements IListaSimple<T> {
     public Nodo<T> getInicio() {
         return inicio;
     }
-      @Override
+
+    @Override
     public void vaciar() {
         inicio = null;
         fin = null;

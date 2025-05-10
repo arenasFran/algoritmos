@@ -1,6 +1,7 @@
 package dominio;
 
 public class Cliente implements Comparable<Cliente> {
+
     private String name;
     private String cedula;
 

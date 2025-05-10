@@ -1,4 +1,3 @@
-
 package dominio;
 
 /**
@@ -6,11 +5,12 @@ package dominio;
  * @author PCMYA
  */
 public class Entrada {
+
     private Evento evento;
     private Cliente cliente;
     private Estado estado;
 
-    public Entrada(Evento evento, Cliente cliente ,Estado estado) {
+    public Entrada(Evento evento, Cliente cliente, Estado estado) {
         this.evento = evento;
         this.cliente = cliente;
         this.estado = estado;
