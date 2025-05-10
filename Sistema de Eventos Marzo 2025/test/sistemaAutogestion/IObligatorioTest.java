@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 public class IObligatorioTest {
 
     private Sistema miSistema;
+    
 
     public IObligatorioTest() {
     }
@@ -25,6 +26,11 @@ public class IObligatorioTest {
     public void setUp() {
         //Inicializo el sistema
         miSistema = new Sistema();
+        miSistema.registrarSala("Sala A", 10);
+        miSistema.registrarSala("Sala B", 20);
+        
+        miSistema.registrarCliente("1235678", "Pedro Alfonso");
+        miSistema.registrarCliente("72829292", "Ryan McLaren");
         
     }
 
@@ -122,7 +128,8 @@ public class IObligatorioTest {
 
     @Test
     public void testListarSalas() {
-    
+    Retorno r = miSistema.listarSalas();
+    assertEquals(Retorno.ok().resultado, r.resultado);
     }
 
     @Test
@@ -132,6 +139,8 @@ public class IObligatorioTest {
 
     @Test
     public void testListarClientes() {
+        Retorno r = miSistema.listarClientes();
+        assertEquals(Retorno.ok().resultado,r.resultado);
     }
 
     @Test

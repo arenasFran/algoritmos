@@ -26,7 +26,7 @@ public class Sistema implements IObligatorio {
         return Retorno.noImplementada();
     }
 
-@Override
+    @Override
     public Retorno registrarSala(String nombre, int capacidad) {
     // Validar capacidad (ERROR_2)
     if (capacidad <= 0) {
@@ -194,11 +194,9 @@ public class Sistema implements IObligatorio {
         System.out.print('#');
     }
     
+ 
     }
     
-
-
-
     @Override
     public Retorno listarEventos() {
         return Retorno.noImplementada();
