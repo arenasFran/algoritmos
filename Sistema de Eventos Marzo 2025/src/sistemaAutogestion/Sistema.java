@@ -54,7 +54,7 @@ public Retorno registrarSala(String nombre, int capacidad) {
 }
 
 @Override
-public Retorno eliminarSala(String nombre) {
+    public Retorno eliminarSala(String nombre) {
     // Validar nombre no nulo o vacío (ERROR_1)
     if (nombre == null || nombre.trim().isEmpty()) {
         return new Retorno(Retorno.Resultado.ERROR_1);
@@ -75,7 +75,7 @@ public Retorno eliminarSala(String nombre) {
 }
 
     @Override
-public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {
+    public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {
     // Validar aforo necesario
     if (aforoNecesario <= 0) {
         return new Retorno(Retorno.Resultado.ERROR_2);  // Error 2: Aforo no válido
