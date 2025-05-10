@@ -201,9 +201,68 @@ public class Sistema implements IObligatorio {
     }
     
     @Override
-    public Retorno listarEventos() {
-        return Retorno.noImplementada();
+public Retorno listarEventos() {
+    if (listaEventos.tamaño() == 0) {
+        return new Retorno(Retorno.Resultado.OK, "No hay eventos registrados.");
     }
+
+    // Paso 1: Copiar los eventos a una nueva ListaSimple para ordenarlos
+    ListaSimple<Evento> eventosOrdenados = new ListaSimple<>();
+    for (int i = 0; i < listaEventos.tamaño(); i++) {
+        eventosOrdenados.agregar(listaEventos.obtenerPorIndice(i));
+    }
+
+    // Paso 2: Ordenar la lista usando Bubble Sort (comparando códigos)
+    for (int i = 0; i < eventosOrdenados.tamaño() - 1; i++) {
+        for (int j = 0; j < eventosOrdenados.tamaño() - i - 1; j++) {
+            Evento e1 = eventosOrdenados.obtenerPorIndice(j);
+            Evento e2 = eventosOrdenados.obtenerPorIndice(j + 1);
+
+            if (e1.getCodigo().compareToIgnoreCase(e2.getCodigo()) > 0) {
+                // Intercambio manual
+                Evento temp = e1;
+                eventosOrdenados.eliminar(e1);
+                eventosOrdenados.eliminar(e2);
+                eventosOrdenados.agregarInicio(e2);
+                eventosOrdenados.agregarInicio(temp);
+
+                // Restaurar el orden del resto
+                ListaSimple<Evento> temporal = new ListaSimple<>();
+                for (int k = 2; k < eventosOrdenados.tamaño(); k++) {
+                    temporal.agregar(eventosOrdenados.obtenerPorIndice(k));
+                }
+                eventosOrdenados.vaciar();
+                eventosOrdenados.agregar(temp);
+                eventosOrdenados.agregar(e2);
+                for (int k = 0; k < temporal.tamaño(); k++) {
+                    eventosOrdenados.agregar(temporal.obtenerPorIndice(k));
+                }
+            }
+        }
+    }
+
+    // Paso 3: Construir el string de retorno
+    StringBuilder salida = new StringBuilder();
+    for (int i = 0; i < eventosOrdenados.tamaño(); i++) {
+        Evento evento = eventosOrdenados.obtenerPorIndice(i);
+        String codigo = evento.getCodigo();
+        String descripcion = evento.getDescripcion();
+        String sala = evento.getSalaAsignada().getNombre();
+        int capacidad = evento.getSalaAsignada().getCapacidad();
+        int vendidas = evento.getEntradasVendidas() == null ? 0 : evento.getEntradasVendidas().tamaño();
+        int disponibles = capacidad - vendidas;
+
+        salida.append("Código: ").append(codigo)
+              .append(" | Descripción: ").append(descripcion)
+              .append(" | Sala: ").append(sala)
+              .append(" | Entradas disponibles: ").append(disponibles)
+              .append(" | Entradas vendidas: ").append(vendidas)
+              .append("\n");
+    }
+
+    return new Retorno(Retorno.Resultado.OK, salida.toString().trim());
+}
+
 
     @Override
     public Retorno listarClientes() {
@@ -268,6 +327,13 @@ public class Sistema implements IObligatorio {
 }
 
 
+    
+    
+    
+    
+    
+    
+    
     @Override
     public Retorno listarClientesDeEvento(String código, int n) {
         return Retorno.noImplementada();

@@ -23,7 +23,11 @@ public class Evento {
         this.aforoNecesario = aforoNecesario;
         this.fecha = fecha;
         this.salaAsignada = salaAsignada;
-        /*this.entradasVendidas = new ListaSimple<>();*/
+        this.entradasVendidas = new ListaSimple<>();
+    }
+
+    public void setEntradasVendidas(ListaSimple<Entrada> entradasVendidas) {
+        this.entradasVendidas = entradasVendidas;
     }
   
   
