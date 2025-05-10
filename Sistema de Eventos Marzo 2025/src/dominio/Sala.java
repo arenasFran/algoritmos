@@ -44,7 +44,7 @@ public class Sala {
     }
     
     @Override
-  public boolean equals(Object obj) {
+    public boolean equals(Object obj) {
     if (this == obj) return true;
     if (obj == null || getClass() != obj.getClass()) return false;
 
@@ -55,10 +55,12 @@ public class Sala {
     System.out.println("Comparando: '" + this.getNombre() + "' con '" + sala.getNombre() + "' => " + iguales);
     return iguales;
 }
-@Override
-public String toString() {
-    return "Sala{" + "nombre='" + Nombre + "', capacidad=" + Capacidad + '}';
-}
+    
+    @Override
+    public String toString() {
+    return Nombre + "-" + Capacidad;
+    }
+
     @Override
     public int hashCode() {
         return Nombre != null ? Nombre.toLowerCase().hashCode() : 0;

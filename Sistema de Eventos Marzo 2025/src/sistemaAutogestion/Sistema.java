@@ -156,8 +156,29 @@ public Retorno registrarSala(String nombre, int capacidad) {
 
     @Override
     public Retorno listarSalas() {
-        return Retorno.noImplementada();
+        listarSalasInversoRecursivo(listaSalas.getInicio(),false);
+        return Retorno.ok();
     }
+    
+    private void listarSalasInversoRecursivo(Nodo<Sala> nodo, boolean esUltima) {
+    if (nodo == null) {
+        return;
+    }
+    
+    // cuando llegamos al último nodo esultima pasa a true
+    listarSalasInversoRecursivo(nodo.getSiguiente(),nodo.getSiguiente() == null);
+    
+    System.out.print(nodo.getDato());
+    
+    if(!esUltima)
+    {
+        System.out.print('#');
+    }
+    
+    }
+    
+
+
 
     @Override
     public Retorno listarEventos() {
