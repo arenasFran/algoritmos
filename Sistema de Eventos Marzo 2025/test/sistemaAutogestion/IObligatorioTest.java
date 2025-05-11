@@ -167,5 +167,21 @@ public class IObligatorioTest {
     	assertEquals(Retorno.Resultado.OK, ret.resultado);
     	assertEquals("Es óptimo", ret.valorString);
     }
+    @Test
+public void testSalaNoOptima() {
+    String[][] vistaSala = {
+        {"#", "#", "#", "#", "#"},
+        {"#", "O", "X", "X", "#"},
+        {"#", "O", "O", "X", "#"},
+        {"#", "O", "O", "X", "#"},
+        {"#", "O", "X", "X", "#"},
+        {"#", "X", "X", "X", "#"},
+        {"#", "#", "#", "#", "#"}
+    };
+
+    Retorno ret = sistema.esSalaOptima(vistaSala);
+    assertEquals(Retorno.Resultado.OK, ret.resultado);
+    assertEquals("No es óptimo", ret.valorString);
+}
 
 }

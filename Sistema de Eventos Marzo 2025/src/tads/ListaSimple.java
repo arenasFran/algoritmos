@@ -195,5 +195,7 @@ public void insertarEn(int indice, T dato) {
 
     tamaño++;
 }
+
+
     
 }

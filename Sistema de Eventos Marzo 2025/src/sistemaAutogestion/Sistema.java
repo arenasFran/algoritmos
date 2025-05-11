@@ -280,34 +280,43 @@ public Retorno listarEventos() {
         }
     }
 
-    System.out.println(resultado);
     return Retorno.ok(resultado);
 }
 
-  @Override
-    public Retorno listarClientes() {
-    // Verificar si hay clientes registrados
+@Override
+public Retorno listarClientes() {
     if (listaClientes.getInicio() == null) {
         return new Retorno(Retorno.Resultado.OK, "No hay clientes registrados.");
     }
 
-    String salida = "";
-    Nodo<Cliente> actual = listaClientes.getInicio();
-    
-    // Recorrer la lista de clientes y construir el string de salida
-    while (actual != null) {
-        Cliente c = actual.getDato();
-        salida += c.getCedula() + "-" + c.getName();
-        
-        if (actual.getSiguiente() != null) {
-            salida += "#";  // Agregar "#" entre los clientes, excepto al final
+    // Copiamos los clientes a una lista auxiliar ordenada por cédula
+    ListaSimple<Cliente> ordenada = new ListaSimple<>();
+
+    for (int i = 0; i < listaClientes.tamaño(); i++) {
+        Cliente clienteActual = listaClientes.obtenerPorIndice(i);
+
+        // Buscamos posición correcta en orden ascendente por cédula
+        int pos = 0;
+        while (pos < ordenada.getTamaño() &&
+               ordenada.obtenerPorIndice(pos).getCedula().compareTo(clienteActual.getCedula()) < 0) {
+            pos++;
         }
 
-        actual = actual.getSiguiente();
+        ordenada.insertarEn(pos, clienteActual);
+    }
+
+    // Construimos el string de salida
+    String salida = "";
+    for (int i = 0; i < ordenada.getTamaño(); i++) {
+        Cliente c = ordenada.obtenerPorIndice(i);
+        salida += c.getCedula() + "-" + c.getName();
+        if (i < ordenada.getTamaño() - 1) {
+            salida += "#";
+        }
     }
 
     return new Retorno(Retorno.Resultado.OK, salida);
-    }
+}
 
 
     @Override
