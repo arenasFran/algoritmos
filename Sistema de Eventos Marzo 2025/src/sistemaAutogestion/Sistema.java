@@ -50,7 +50,7 @@ public class Sistema implements IObligatorio {
 
         // Crear y agregar la nueva sala
         Sala nuevaSala = new Sala(nombre.trim(), capacidad);
-        listaSalas.agregarInicio(nuevaSala);
+        listaSalas.agregarFin(nuevaSala);
 
         return new Retorno(Retorno.Resultado.OK);
     }
@@ -77,7 +77,7 @@ public class Sistema implements IObligatorio {
     }
 
     @Override
-  public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {
+    public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {
     if (aforoNecesario <= 0) {
         return new Retorno(Retorno.Resultado.ERROR_2);  // Aforo no válido
     }
@@ -89,9 +89,6 @@ public class Sistema implements IObligatorio {
         fecha.getMonthValue() < 1 || fecha.getMonthValue() > 12) {
         return new Retorno(Retorno.Resultado.ERROR_3);  // Fecha inválida
     }
-
-    
-    
     // Verificar duplicado
     for (int i = 0; i < listaEventos.tamaño(); i++) {
         Evento evento = listaEventos.obtenerPorIndice(i);
@@ -101,14 +98,14 @@ public class Sistema implements IObligatorio {
     }
 
     // Buscar sala disponible más pequeña que cumpla con el aforo
-int menorCapacidad = 0;
-for (int i = 0; i < listaSalas.tamaño(); i++) {
+    int menorCapacidad = 0;
+    for (int i = 0; i < listaSalas.tamaño(); i++) {
     menorCapacidad += listaSalas.obtenerPorIndice(i).getCapacidad();
-}
-menorCapacidad += 1; // Asegurar que sea mayor que cualquier capacidad individual
+    }
+    menorCapacidad += 1; // Asegurar que sea mayor que cualquier capacidad individual
 
-Sala salaAsignada = null;
-for (int i = 0; i < listaSalas.tamaño(); i++) {
+    Sala salaAsignada = null;
+    for (int i = 0; i < listaSalas.tamaño(); i++) {
     Sala sala = listaSalas.obtenerPorIndice(i);
     if (sala.getCapacidad() >= aforoNecesario && !sala.getFechasOcupadas().contiene(fecha)) {
         if (sala.getCapacidad() < menorCapacidad) {
@@ -116,7 +113,7 @@ for (int i = 0; i < listaSalas.tamaño(); i++) {
             menorCapacidad = sala.getCapacidad();
         }
     }
-}
+    }
     
     for (int i = 0; i < listaSalas.tamaño(); i++) {
         Sala sala = listaSalas.obtenerPorIndice(i);
@@ -146,42 +143,30 @@ for (int i = 0; i < listaSalas.tamaño(); i++) {
 }
 
     @Override
-    public Retorno registrarCliente(String cedula, String nombre) {
-        Cliente c = new Cliente(cedula, nombre);
-
-        if (cedula.length() != 8) {
-            return Retorno.error1();
-        }
-
-        // Verificar si ya existe
-        Nodo<Cliente> actual = listaClientes.getInicio();
-        while (actual != null) {
-            if (actual.getDato().equals(c)) {
-                return Retorno.error2();
-            }
-            actual = actual.getSiguiente();
-        }
-
-        // Insertar ordenadamente por cédula (ascendente)
-        Nodo<Cliente> nuevoNodo = new Nodo<>(c);
-        if (listaClientes.getInicio() == null
-                || c.compareTo(listaClientes.getInicio().getDato()) < 0) {
-            // Insertar al principio
-            nuevoNodo.setSiguiente(listaClientes.getInicio());
-            listaClientes.setInicio(nuevoNodo);
-        } else {
-            // Buscar posición
-            Nodo<Cliente> anterior = listaClientes.getInicio();
-            while (anterior.getSiguiente() != null
-                    && c.compareTo(anterior.getSiguiente().getDato()) > 0) {
-                anterior = anterior.getSiguiente();
-            }
-            nuevoNodo.setSiguiente(anterior.getSiguiente());
-            anterior.setSiguiente(nuevoNodo);
-        }
-
-        return Retorno.ok();
+   public Retorno registrarCliente(String cedula, String nombre) {
+    // Validar que la cédula sea numérica
+    if (!cedula.matches("\\d{8}")) {  // Comprobamos que la cédula sea exactamente 8 dígitos
+        return Retorno.error1(); // Error si no es válida
     }
+
+    Cliente c = new Cliente(cedula, nombre);
+
+    // Verificar si ya existe
+    Nodo<Cliente> actual = listaClientes.getInicio();
+    while (actual != null) {
+        if (actual.getDato().equals(c)) {
+            return Retorno.error2();
+        }
+        actual = actual.getSiguiente();
+    }
+
+    // Insertar al final sin preocuparse por el orden
+    Nodo<Cliente> nuevoNodo = new Nodo<>(c);
+    listaClientes.agregarFin(nuevoNodo);
+
+    return Retorno.ok();
+}
+
 
     @Override
     public Retorno comprarEntrada(String cedula, String codigoEvento) {
@@ -205,21 +190,21 @@ for (int i = 0; i < listaSalas.tamaño(); i++) {
 
     @Override
     public Retorno listarSalas() {
-        listarSalasInversoRecursivo(listaSalas.getInicio(), false);
+        listarSalasInversoRecursivo(listaSalas.getInicio());
         return Retorno.ok();
     }
 
-    private void listarSalasInversoRecursivo(Nodo<Sala> nodo, boolean esUltima) {
+    private void listarSalasInversoRecursivo(Nodo<Sala> nodo) {
         if (nodo == null) {
             return;
         }
 
         // cuando llegamos al último nodo esultima pasa a true
-        listarSalasInversoRecursivo(nodo.getSiguiente(), nodo.getSiguiente() == null);
+        listarSalasInversoRecursivo(nodo.getSiguiente());
 
         System.out.print(nodo.getDato());
 
-        if (!esUltima) {
+        if (nodo != listaSalas.getInicio()) {
             System.out.print('#');
         }
 
@@ -285,20 +270,50 @@ for (int i = 0; i < listaSalas.tamaño(); i++) {
         return new Retorno(Retorno.Resultado.OK, salida.toString().trim());
     }
 
-    @Override
+        @Override
     public Retorno listarClientes() {
-        Nodo<Cliente> actual = listaClientes.getInicio();
+    ordenarListaClientes(); // <- Aquí se ordena justo antes de imprimir
 
-        while (actual != null) {
-            System.out.print(actual.getDato());
-            if (actual.getSiguiente() != null) {
-                System.out.print('#');
+    Nodo<Cliente> actual = listaClientes.getInicio();
+    while (actual != null) {
+        System.out.print(actual.getDato());
+        if (actual.getSiguiente() != null) {
+            System.out.print("#");
+        }
+        actual = actual.getSiguiente();
+    }
+
+    return Retorno.ok();
+}
+
+    private void ordenarListaClientes() {
+    Nodo<Cliente> sorted = null;  // lista ordenada temporal
+
+    Nodo<Cliente> actual = listaClientes.getInicio();
+    while (actual != null) {
+        Nodo<Cliente> siguiente = actual.getSiguiente();
+
+        // Inserta actual en la posición correcta de la lista sorted
+        if (sorted == null || actual.getDato().compareTo(sorted.getDato()) < 0) {
+            actual.setSiguiente(sorted);
+            sorted = actual;
+        } else {
+            Nodo<Cliente> temp = sorted;
+            while (temp.getSiguiente() != null && actual.getDato().compareTo(temp.getSiguiente().getDato()) > 0) {
+                temp = temp.getSiguiente();
             }
-            actual = actual.getSiguiente();
+            actual.setSiguiente(temp.getSiguiente());
+            temp.setSiguiente(actual);
         }
 
-        return Retorno.ok();
+        actual = siguiente;
     }
+
+    listaClientes.setInicio(sorted);  // actualiza la lista original
+}
+
+
+   
 
     @Override
 

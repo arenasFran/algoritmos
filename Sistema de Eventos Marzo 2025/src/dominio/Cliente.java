@@ -42,12 +42,7 @@ public class Cliente implements Comparable<Cliente> {
     }
 
     @Override
-    public int hashCode() {
-        return this.cedula.hashCode();
-    }
-
-    @Override
     public int compareTo(Cliente otro) {
-        return this.cedula.compareTo(otro.cedula);
+        return this.cedula.compareTo(otro.getCedula());
     }
 }

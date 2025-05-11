@@ -170,6 +170,7 @@ public class IObligatorioTest {
             {"#", "X", "X", "O", "X", "X", "#"},
             {"#", "#", "#", "O", "#", "#", "#"},
             {"#", "#", "#", "O", "#", "#", "#"},};
+            
 
         Retorno r = miSistema.esSalaOptima(vistaSala);
 
