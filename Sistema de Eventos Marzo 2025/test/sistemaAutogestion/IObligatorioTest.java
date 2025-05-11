@@ -57,7 +57,7 @@ public class IObligatorioTest {
 	Retorno ret = sistema.registrarSala("Sala A", 50);
         assertEquals(Retorno.Resultado.OK, ret.resultado);
 
-         ret = sistema.registrarSala("Sala B", 0);
+        ret = sistema.registrarSala("Sala B", 0);
         assertEquals(Retorno.Resultado.ERROR_2, ret.resultado);
 
 	ret = sistema.registrarSala("Sala B", -10);
@@ -79,7 +79,7 @@ public class IObligatorioTest {
 	assertEquals(Retorno.Resultado.OK, ret.resultado);
 
         LocalDate fecha = LocalDate.of(2025, 5, 10);
-         ret = sistema.registrarEvento("EVT01", "Concierto", 80, fecha);
+        ret = sistema.registrarEvento("EVT01", "Concierto", 80, fecha);
         assertEquals(Retorno.Resultado.OK, ret.resultado);
     }
 
@@ -100,7 +100,16 @@ public class IObligatorioTest {
 	ret = sistema.registrarCliente("AA345444", "Martina Gutierrez");
         assertEquals(Retorno.Resultado.ERROR_1, ret.resultado);
     }
+   @Test
+    public void testRegistrarCliente_Error2() {
+    Retorno ret1 = sistema.registrarCliente("12345678", "Juan Pérez");
+    assertEquals(Retorno.Resultado.OK, ret1.resultado);
 
+    Retorno ret2 = sistema.registrarCliente("12345678", "Otro Nombre");
+    assertEquals(Retorno.Resultado.ERROR_2, ret2.resultado); // Mismo número de cédula
+}
+
+   
     @Test
     public void testListarSalas() {
         sistema.registrarSala("Sala A", 50);

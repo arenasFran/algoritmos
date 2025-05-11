@@ -114,17 +114,17 @@ public class ListaSimple<T> implements IListaSimple<T> {
     }
 
     @Override
-    public boolean contiene(T dato) {
-        Nodo<T> actual = inicio;
-        while (actual != null) {
-
-            if (actual.getDato().equals(dato)) {
-                return true;
-            }
-            actual = actual.getSiguiente();
+   public boolean contiene(T cliente) {
+    Nodo<T> nodoActual = inicio;
+    while (nodoActual != null) {
+        if (nodoActual.getDato().equals(cliente)) {  
+            return true;
         }
-        return false;
+        nodoActual = nodoActual.getSiguiente();
     }
+    return false;
+}
+
 
     @Override
     public void mostrar() {

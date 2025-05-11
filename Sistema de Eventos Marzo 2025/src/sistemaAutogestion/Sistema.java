@@ -22,7 +22,6 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno crearSistemaDeGestion() {
-        listaClientes = new ListaSimple<Cliente>();
         listaSalas = new ListaSimple<Sala>();
         listaEventos = new ListaSimple<Evento>();
         return Retorno.ok();
@@ -77,7 +76,7 @@ public class Sistema implements IObligatorio {
     }
 
     @Override
-  public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {
+    public Retorno registrarEvento(String codigo, String descripcion, int aforoNecesario, LocalDate fecha) {
     if (aforoNecesario <= 0) {
         return new Retorno(Retorno.Resultado.ERROR_2);  // Aforo no válido
     }
@@ -144,45 +143,27 @@ for (int i = 0; i < listaSalas.tamaño(); i++) {
 
     return new Retorno(Retorno.Resultado.OK);
 }
-
+    
+    
+    
     @Override
-    public Retorno registrarCliente(String cedula, String nombre) {
-    // Paso 1: Validar la cédula
+   public Retorno registrarCliente(String cedula, String nombre) {
     if (!cedulaEsValida(cedula)) {
-        return Retorno.error1();  // Cédula inválida
+        return new Retorno(Retorno.Resultado.ERROR_1);
     }
-
-    // Paso 2: Verificar si ya existe un cliente con la misma cédula
-    Cliente c = new Cliente(cedula, nombre);
-    Nodo<Cliente> actual = listaClientes.getInicio();
-    while (actual != null) {
-        if (actual.getDato().equals(c)) {
-            return Retorno.error2();  // Cliente ya registrado
-        }
-        actual = actual.getSiguiente();
+    
+    if (listaClientes.contiene(new Cliente(nombre,cedula))) {  
+        return new Retorno(Retorno.Resultado.ERROR_2);
     }
-
-    // Paso 3: Insertar el cliente de manera ordenada por cédula (ascendente)
-    Nodo<Cliente> nuevoNodo = new Nodo<>(c);
-
-    // Si la lista está vacía o el nuevo cliente tiene una cédula menor que el primer cliente
-    if (listaClientes.getInicio() == null || c.compareTo(listaClientes.getInicio().getDato()) < 0) {
-        nuevoNodo.setSiguiente(listaClientes.getInicio());
-        listaClientes.setInicio(nuevoNodo);  // Insertar al principio
-    } else {
-        // Buscar la posición correcta para insertar
-        Nodo<Cliente> anterior = listaClientes.getInicio();
-        while (anterior.getSiguiente() != null && c.compareTo(anterior.getSiguiente().getDato()) > 0) {
-            anterior = anterior.getSiguiente();
-        }
-        nuevoNodo.setSiguiente(anterior.getSiguiente());
-        anterior.setSiguiente(nuevoNodo);  // Insertar en el lugar correcto
-    }
-
-    return Retorno.ok();  // Registro exitoso
+    Cliente nuevoCliente = new Cliente(nombre, cedula);
+    listaClientes.agregar(nuevoCliente); 
+    return new Retorno(Retorno.Resultado.OK);
 }
 
-public boolean cedulaEsValida(String cedula) {
+   
+
+
+    public boolean cedulaEsValida(String cedula) {
     // Verifica si la cédula tiene exactamente 8 caracteres numéricos
     if (cedula == null || cedula.length() != 8) {
         return false;  // Longitud incorrecta
@@ -197,7 +178,7 @@ public boolean cedulaEsValida(String cedula) {
     }
 
     return true;  // La cédula es válida
-}
+    }
 
 
     @Override
@@ -312,7 +293,7 @@ public boolean cedulaEsValida(String cedula) {
     }
 
   @Override
-public Retorno listarClientes() {
+    public Retorno listarClientes() {
     // Verificar si hay clientes registrados
     if (listaClientes.getInicio() == null) {
         return new Retorno(Retorno.Resultado.OK, "No hay clientes registrados.");
@@ -334,7 +315,7 @@ public Retorno listarClientes() {
     }
 
     return new Retorno(Retorno.Resultado.OK, salida);
-}
+    }
 
 
     @Override

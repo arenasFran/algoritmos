@@ -26,28 +26,28 @@ public class Cliente implements Comparable<Cliente> {
         this.cedula = cedula;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null || this.getClass() != obj.getClass()) {
-            return false;
-        }
-
-        Cliente other = (Cliente) obj;
-        return this.cedula.equals(other.getCedula());
-    }
-
-    @Override
-    public String toString() {
-        return this.cedula + "-" + this.name;
-    }
-
-    @Override
-    public int hashCode() {
-        return this.cedula.hashCode();
-    }
-
-    @Override
+      @Override
     public int compareTo(Cliente otro) {
         return this.cedula.compareTo(otro.cedula);
     }
+
+   @Override
+    public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null || getClass() != obj.getClass()) return false;
+    Cliente otro = (Cliente) obj;
+    return this.cedula.equals(otro.cedula);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return cedula.hashCode();
+    }
+
+    @Override
+        public String toString() {
+        return cedula + "-" + name;
+    }
 }
+
