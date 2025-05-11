@@ -147,41 +147,58 @@ for (int i = 0; i < listaSalas.tamaño(); i++) {
 
     @Override
     public Retorno registrarCliente(String cedula, String nombre) {
-        Cliente c = new Cliente(cedula, nombre);
-
-        if (cedula.length() != 8) {
-            return Retorno.error1();
-        }
-
-        // Verificar si ya existe
-        Nodo<Cliente> actual = listaClientes.getInicio();
-        while (actual != null) {
-            if (actual.getDato().equals(c)) {
-                return Retorno.error2();
-            }
-            actual = actual.getSiguiente();
-        }
-
-        // Insertar ordenadamente por cédula (ascendente)
-        Nodo<Cliente> nuevoNodo = new Nodo<>(c);
-        if (listaClientes.getInicio() == null
-                || c.compareTo(listaClientes.getInicio().getDato()) < 0) {
-            // Insertar al principio
-            nuevoNodo.setSiguiente(listaClientes.getInicio());
-            listaClientes.setInicio(nuevoNodo);
-        } else {
-            // Buscar posición
-            Nodo<Cliente> anterior = listaClientes.getInicio();
-            while (anterior.getSiguiente() != null
-                    && c.compareTo(anterior.getSiguiente().getDato()) > 0) {
-                anterior = anterior.getSiguiente();
-            }
-            nuevoNodo.setSiguiente(anterior.getSiguiente());
-            anterior.setSiguiente(nuevoNodo);
-        }
-
-        return Retorno.ok();
+    // Paso 1: Validar la cédula
+    if (!cedulaEsValida(cedula)) {
+        return Retorno.error1();  // Cédula inválida
     }
+
+    // Paso 2: Verificar si ya existe un cliente con la misma cédula
+    Cliente c = new Cliente(cedula, nombre);
+    Nodo<Cliente> actual = listaClientes.getInicio();
+    while (actual != null) {
+        if (actual.getDato().equals(c)) {
+            return Retorno.error2();  // Cliente ya registrado
+        }
+        actual = actual.getSiguiente();
+    }
+
+    // Paso 3: Insertar el cliente de manera ordenada por cédula (ascendente)
+    Nodo<Cliente> nuevoNodo = new Nodo<>(c);
+
+    // Si la lista está vacía o el nuevo cliente tiene una cédula menor que el primer cliente
+    if (listaClientes.getInicio() == null || c.compareTo(listaClientes.getInicio().getDato()) < 0) {
+        nuevoNodo.setSiguiente(listaClientes.getInicio());
+        listaClientes.setInicio(nuevoNodo);  // Insertar al principio
+    } else {
+        // Buscar la posición correcta para insertar
+        Nodo<Cliente> anterior = listaClientes.getInicio();
+        while (anterior.getSiguiente() != null && c.compareTo(anterior.getSiguiente().getDato()) > 0) {
+            anterior = anterior.getSiguiente();
+        }
+        nuevoNodo.setSiguiente(anterior.getSiguiente());
+        anterior.setSiguiente(nuevoNodo);  // Insertar en el lugar correcto
+    }
+
+    return Retorno.ok();  // Registro exitoso
+}
+
+public boolean cedulaEsValida(String cedula) {
+    // Verifica si la cédula tiene exactamente 8 caracteres numéricos
+    if (cedula == null || cedula.length() != 8) {
+        return false;  // Longitud incorrecta
+    }
+
+    // Verificar que todos los caracteres sean dígitos numéricos
+    for (int i = 0; i < cedula.length(); i++) {
+        char c = cedula.charAt(i);
+        if (c < '0' || c > '9') {
+            return false;  // No es un número
+        }
+    }
+
+    return true;  // La cédula es válida
+}
+
 
     @Override
     public Retorno comprarEntrada(String cedula, String codigoEvento) {
@@ -203,27 +220,36 @@ for (int i = 0; i < listaSalas.tamaño(); i++) {
         return Retorno.noImplementada();
     }
 
-    @Override
+   @Override
     public Retorno listarSalas() {
-        listarSalasInversoRecursivo(listaSalas.getInicio(), false);
-        return Retorno.ok();
+    if (listaSalas.tamaño() == 0) {
+        return new Retorno(Retorno.Resultado.OK, "No hay salas registradas.");
     }
 
-    private void listarSalasInversoRecursivo(Nodo<Sala> nodo, boolean esUltima) {
-        if (nodo == null) {
-            return;
-        }
 
-        // cuando llegamos al último nodo esultima pasa a true
-        listarSalasInversoRecursivo(nodo.getSiguiente(), nodo.getSiguiente() == null);
-
-        System.out.print(nodo.getDato());
-
-        if (!esUltima) {
-            System.out.print('#');
-        }
-
+    ListaSimple<Sala> salasOrdenadas = new ListaSimple<>();
+    for (int i = 0; i < listaSalas.tamaño(); i++) {
+        salasOrdenadas.agregar(listaSalas.obtenerPorIndice(i));
     }
+
+    // Paso 2: Recorrer la lista de salas y construir la salida
+    String salida = "";
+    for (int i = 0; i < salasOrdenadas.tamaño(); i++) {
+        Sala sala = salasOrdenadas.obtenerPorIndice(i);
+
+        // Si no es el primer elemento, se agrega el separador '#'
+        if (i > 0) {
+            salida += "#";
+        }
+
+        // Agregar el nombre y la capacidad de la sala
+        salida += sala.getNombre() + "-" + sala.getCapacidad();
+    }
+
+    // Devolver la salida formateada
+    return new Retorno(Retorno.Resultado.OK, salida);
+}
+
 
     @Override
     public Retorno listarEventos() {
@@ -285,20 +311,31 @@ for (int i = 0; i < listaSalas.tamaño(); i++) {
         return new Retorno(Retorno.Resultado.OK, salida.toString().trim());
     }
 
-    @Override
-    public Retorno listarClientes() {
-        Nodo<Cliente> actual = listaClientes.getInicio();
+  @Override
+public Retorno listarClientes() {
+    // Verificar si hay clientes registrados
+    if (listaClientes.getInicio() == null) {
+        return new Retorno(Retorno.Resultado.OK, "No hay clientes registrados.");
+    }
 
-        while (actual != null) {
-            System.out.print(actual.getDato());
-            if (actual.getSiguiente() != null) {
-                System.out.print('#');
-            }
-            actual = actual.getSiguiente();
+    String salida = "";
+    Nodo<Cliente> actual = listaClientes.getInicio();
+    
+    // Recorrer la lista de clientes y construir el string de salida
+    while (actual != null) {
+        Cliente c = actual.getDato();
+        salida += c.getCedula() + "-" + c.getName();
+        
+        if (actual.getSiguiente() != null) {
+            salida += "#";  // Agregar "#" entre los clientes, excepto al final
         }
 
-        return Retorno.ok();
+        actual = actual.getSiguiente();
     }
+
+    return new Retorno(Retorno.Resultado.OK, salida);
+}
+
 
     @Override
 
@@ -321,7 +358,7 @@ for (int i = 0; i < listaSalas.tamaño(); i++) {
                 String celda = vistaSala[f][c];
 
                 if (celda.equals("#")) {
-                    ocupadosConsecutivosActual = 0; // límite, reinicia
+                    ocupadosConsecutivosActual = 0;
                 } else if (celda.equals("O")) {
                     ocupadosConsecutivosActual++;
                     if (ocupadosConsecutivosActual > maxOcupadosConsecutivos) {
@@ -329,7 +366,7 @@ for (int i = 0; i < listaSalas.tamaño(); i++) {
                     }
                 } else if (celda.equals("X")) {
                     libres++;
-                    ocupadosConsecutivosActual = 0; // rompe la racha
+                    ocupadosConsecutivosActual = 0; 
                 }
             }
 
