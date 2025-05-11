@@ -10,10 +10,6 @@ public class ListaSimple<T> implements IListaSimple<T> {
         return tamaño;
     }
 
-    public void setTamaño(int tamaño) {
-        this.tamaño = tamaño;
-    }
-
     public ListaSimple() {
         this.inicio = null;
         this.fin = null;
@@ -105,34 +101,16 @@ public class ListaSimple<T> implements IListaSimple<T> {
         return false;
     }
 
-    public void setInicio(Nodo<T> inicio) {
-        this.inicio = inicio;
-    }
-
-    public void setFin(Nodo<T> fin) {
-        this.fin = fin;
-    }
-
     @Override
-   public boolean contiene(T cliente) {
-    Nodo<T> nodoActual = inicio;
-    while (nodoActual != null) {
-        if (nodoActual.getDato().equals(cliente)) {  
-            return true;
+    public boolean contiene(T cliente) {
+        Nodo<T> nodoActual = inicio;
+        while (nodoActual != null) {
+            if (nodoActual.getDato().equals(cliente)) {
+                return true;
+            }
+            nodoActual = nodoActual.getSiguiente();
         }
-        nodoActual = nodoActual.getSiguiente();
-    }
-    return false;
-}
-
-
-    @Override
-    public void mostrar() {
-        Nodo<T> actual = inicio;
-        while (actual != null) {
-            System.out.println(actual.getDato());
-            actual = actual.getSiguiente();
-        }
+        return false;
     }
 
     @Override
@@ -141,61 +119,37 @@ public class ListaSimple<T> implements IListaSimple<T> {
     }
 
     @Override
-    public void esVacia() {
-        if (inicio == null) {
-            System.out.println("La lista está vacía.");
-        } else {
-            System.out.println("La lista no está vacía.");
-        }
-    }
-
-    @Override
-    public void esLLena() {
-        // Este método depende de si la lista tiene un límite, 
-        // pero en una lista enlazada simple generalmente no está "llena".
-        System.out.println("La lista nunca está llena en una implementación de lista enlazada simple.");
-    }
-
     public Nodo<T> getInicio() {
         return inicio;
     }
 
     @Override
-    public void vaciar() {
-        inicio = null;
-        fin = null;
-        tamaño = 0;
-    }
-    
-       @Override
-public void insertarEn(int indice, T dato) {
-    if (indice < 0 || indice > tamaño) {
-        return; // Índice inválido, no hace nada
-    }
+    public void insertarEn(int indice, T dato) {
+        if (indice < 0 || indice > tamaño) {
+            return;
+        }
 
-    Nodo<T> nuevo = new Nodo<>(dato);
+        Nodo<T> nuevo = new Nodo<>(dato);
 
-    if (indice == 0) {
-        nuevo.setSiguiente(inicio);
-        inicio = nuevo;
-        if (tamaño == 0) {
-            fin = nuevo;
+        if (indice == 0) {
+            nuevo.setSiguiente(inicio);
+            inicio = nuevo;
+            if (tamaño == 0) {
+                fin = nuevo;
+            }
+        } else {
+            Nodo<T> actual = inicio;
+            for (int i = 0; i < indice - 1; i++) {
+                actual = actual.getSiguiente();
+            }
+            nuevo.setSiguiente(actual.getSiguiente());
+            actual.setSiguiente(nuevo);
+            if (nuevo.getSiguiente() == null) {
+                fin = nuevo;
+            }
         }
-    } else {
-        Nodo<T> actual = inicio;
-        for (int i = 0; i < indice - 1; i++) {
-            actual = actual.getSiguiente();
-        }
-        nuevo.setSiguiente(actual.getSiguiente());
-        actual.setSiguiente(nuevo);
-        if (nuevo.getSiguiente() == null) {
-            fin = nuevo;
-        }
+
+        tamaño++;
     }
 
-    tamaño++;
-}
-
-
-    
 }

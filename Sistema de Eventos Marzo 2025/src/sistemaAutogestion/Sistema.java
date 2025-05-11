@@ -144,7 +144,6 @@ public class Sistema implements IObligatorio {
             }
         }
 
-    
         return salaAsignada;
     }
 

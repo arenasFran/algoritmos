@@ -12,21 +12,12 @@ public interface IListaSimple<T> {
 
     public boolean contiene(T dato);
 
-    public void mostrar();
-
     public int tamaño();
-
-    public void esVacia();
-
-    public void esLLena();
-
-    public void vaciar();
 
     public Nodo<T> getInicio();
 
-    public void setInicio(Nodo<T> nodo);
-
     public T obtenerPorIndice(int indice);
-     public void insertarEn(int indice, T dato);
+
+    public void insertarEn(int indice, T dato);
 
 }

@@ -38,7 +38,7 @@ public class Retorno {
     public static Retorno error2() {
         return new Retorno(Resultado.ERROR_2);
     }
-    
+
     public static Retorno error3() {
         return new Retorno(Resultado.ERROR_3);
     }
