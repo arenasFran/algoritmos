@@ -149,5 +149,40 @@ public class IObligatorioTest {
     	assertEquals(Retorno.Resultado.OK, ret.resultado);
     	assertEquals("Es óptimo", ret.valorString);
     }
+    
+    @Test
+public void testListarSalasFormatoYOrden() {
+    miSistema.registrarSala("Sala C", 15);
+    miSistema.registrarSala("Sala D", 1);
+    miSistema.registrarSala("Sala E", 150);
+
+    Retorno r = miSistema.listarSalas();
+    assertEquals(Retorno.ok().resultado, r.resultado);
+
+    String esperado = "Sala E-150#Sala D-1#Sala C-15#Sala B-20#Sala A-10";
+    assertEquals(esperado, r.valorString);
+}
+
+    @Test
+public void testListarEventosFormatoYOrden() {
+    // Eventos registrados en setUp()
+
+    Retorno r = miSistema.listarEventos();
+    assertEquals(Retorno.ok().resultado, r.resultado);
+
+    String esperado = "16B97-Evento politico B-Sala A-20-0#17A98-Evento politico A-Sala B-10-0";
+    assertEquals(esperado, r.valorString);
+}
+
+@Test
+public void testListarClientesFormatoYOrden() {
+    // Clientes registrados en setUp()
+
+    Retorno r = miSistema.listarClientes();
+    assertEquals(Retorno.ok().resultado, r.resultado);
+
+    String esperado = "1235678-Pedro Alfonso#72829292-Ryan McLaren";
+    assertEquals(esperado, r.valorString);
+}
 
 }
