@@ -25,15 +25,26 @@ public class IObligatorioTest {
     public void setUp() {
         //Inicializo el sistema
         miSistema = new Sistema();
-        miSistema.registrarSala("Sala A", 10);
-        miSistema.registrarSala("Sala B", 20);
-        miSistema.registrarEvento("17A98", "Evento politico A", 19, LocalDate.of(2025, 10, 7));
-        miSistema.registrarEvento("16B97", "Evento politico B", 8, LocalDate.of(2025, 10, 7));
-        miSistema.registrarCliente("1235678", "Pedro Alfonso");
-        miSistema.registrarCliente("72829292", "Ryan McLaren");
+        miSistema.crearSistemaDeGestion();
+
+        miSistema.registrarSala("Sala A", 16);
+        miSistema.registrarSala("Sala B", 18);
+        miSistema.registrarSala("Sala F", 14);
+
+     miSistema.registrarEvento("CUC22", "Tango Azul", 13, LocalDate.of(2025, 10, 7)); // Sala B
+     miSistema.registrarEvento("TEC43", "Seminario de Tecnología", 17, LocalDate.of(2025, 10, 7)); // Sala B
+     miSistema.registrarEvento("KAK34", "Noche de Rock", 15, LocalDate.of(2025, 10, 7)); // Sala B
 
     }
 
+     @Test
+public void testListarEventosFormatoYOrden() {
+    Retorno r = miSistema.listarEventos();
+    assertEquals(Retorno.Resultado.OK, r.resultado);
+
+    String esperado = "CUC22-Tango Azul-Sala F-14-0#KAK34-Noche de Rock-Sala A-16-0#TEC43-Seminario de Tecnología-Sala B-18-0";
+    assertEquals(esperado, r.valorString);
+}
     @Test
     public void testCrearSistemaDeGestionOk() {
         Retorno r = miSistema.crearSistemaDeGestion();
@@ -42,9 +53,8 @@ public class IObligatorioTest {
 
     @Test
     public void testRegistrarSalaOk() {
-        Retorno r = miSistema.registrarSala("Sala C", 15);
-        assertEquals(Retorno.ok().resultado, r.resultado);
-        r = miSistema.registrarSala("Sala D", 1);
+     
+    Retorno    r = miSistema.registrarSala("Sala D", 1);
         assertEquals(Retorno.ok().resultado, r.resultado);
         r = miSistema.registrarSala("Sala E", 150);
         assertEquals(Retorno.ok().resultado, r.resultado);
@@ -53,7 +63,7 @@ public class IObligatorioTest {
     @Test
     public void testRegistrarSalaError1() {
 
-        Retorno r = miSistema.registrarSala("Sala A", 15);
+       Retorno r = miSistema.registrarSala("Sala A", 15);
         assertEquals(Retorno.error1().resultado, r.resultado);
         r = miSistema.registrarSala("", 10);
         assertEquals(Retorno.error1().resultado, r.resultado);
@@ -63,7 +73,7 @@ public class IObligatorioTest {
     public void testRegistrarSalaError2() {
         Retorno r = miSistema.registrarSala("Sala Z", -15);
         assertEquals(Retorno.error2().resultado, r.resultado);
-        r = miSistema.registrarSala("Sala W", -0);
+        r = miSistema.registrarSala("Sala W", 0);
         assertEquals(Retorno.error2().resultado, r.resultado);
     }
 
@@ -177,40 +187,30 @@ public class IObligatorioTest {
 
         assertTrue(r.valorString.contains("Es óptimo"));
     }
-    
-    @Test
-public void testListarSalasFormatoYOrden() {
-    miSistema.registrarSala("Sala C", 15);
-    miSistema.registrarSala("Sala D", 1);
-    miSistema.registrarSala("Sala E", 150);
-
-    Retorno r = miSistema.listarSalas();
-    assertEquals(Retorno.ok().resultado, r.resultado);
-
-    String esperado = "Sala E-150#Sala D-1#Sala C-15#Sala B-20#Sala A-10";
-    assertEquals(esperado, r.valorString);
-}
 
     @Test
-public void testListarEventosFormatoYOrden() {
-    // Eventos registrados en setUp()
+    public void testListarSalasFormatoYOrden() {
+      
 
-    Retorno r = miSistema.listarEventos();
-    assertEquals(Retorno.ok().resultado, r.resultado);
+        Retorno r = miSistema.listarSalas();
+        assertEquals(Retorno.ok().resultado, r.resultado);
 
-    String esperado = "16B97-Evento politico B-Sala A-20-0#17A98-Evento politico A-Sala B-10-0";
-    assertEquals(esperado, r.valorString);
-}
+        String esperado = "Sala E-150#Sala D-1#Sala C-15#Sala B-20#Sala A-10";
+        assertEquals(esperado, r.valorString);
+    }
 
-@Test
-public void testListarClientesFormatoYOrden() {
-    // Clientes registrados en setUp()
 
-    Retorno r = miSistema.listarClientes();
-    assertEquals(Retorno.ok().resultado, r.resultado);
 
-    String esperado = "1235678-Pedro Alfonso#72829292-Ryan McLaren";
-    assertEquals(esperado, r.valorString);
-}
+
+    @Test
+    public void testListarClientesFormatoYOrden() {
+        // Clientes registrados en setUp()
+
+        Retorno r = miSistema.listarClientes();
+        assertEquals(Retorno.ok().resultado, r.resultado);
+
+        String esperado = "1235678-Pedro Alfonso#72829292-Ryan McLaren";
+        assertEquals(esperado, r.valorString);
+    }
 
 }
