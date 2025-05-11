@@ -166,4 +166,34 @@ public class ListaSimple<T> implements IListaSimple<T> {
         fin = null;
         tamaño = 0;
     }
+    
+       @Override
+public void insertarEn(int indice, T dato) {
+    if (indice < 0 || indice > tamaño) {
+        return; // Índice inválido, no hace nada
+    }
+
+    Nodo<T> nuevo = new Nodo<>(dato);
+
+    if (indice == 0) {
+        nuevo.setSiguiente(inicio);
+        inicio = nuevo;
+        if (tamaño == 0) {
+            fin = nuevo;
+        }
+    } else {
+        Nodo<T> actual = inicio;
+        for (int i = 0; i < indice - 1; i++) {
+            actual = actual.getSiguiente();
+        }
+        nuevo.setSiguiente(actual.getSiguiente());
+        actual.setSiguiente(nuevo);
+        if (nuevo.getSiguiente() == null) {
+            fin = nuevo;
+        }
+    }
+
+    tamaño++;
+}
+    
 }

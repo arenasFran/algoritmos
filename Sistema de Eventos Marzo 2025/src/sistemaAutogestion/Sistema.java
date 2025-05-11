@@ -232,65 +232,57 @@ for (int i = 0; i < listaSalas.tamaño(); i++) {
 }
 
 
-    @Override
-    public Retorno listarEventos() {
-        if (listaEventos.tamaño() == 0) {
-            return new Retorno(Retorno.Resultado.OK, "No hay eventos registrados.");
-        }
+ @Override
+public Retorno listarEventos() {
+    if (listaEventos == null || listaEventos.tamaño() == 0) {
+        return Retorno.ok();
+    }
 
-        // Paso 1: Copiar los eventos a una nueva ListaSimple para ordenarlos
-        ListaSimple<Evento> eventosOrdenados = new ListaSimple<>();
-        for (int i = 0; i < listaEventos.tamaño(); i++) {
-            eventosOrdenados.agregar(listaEventos.obtenerPorIndice(i));
-        }
+    ListaSimple<Evento> eventosOrdenados = new ListaSimple<>();
 
-        // Paso 2: Ordenar la lista usando Bubble Sort (comparando códigos)
-        for (int i = 0; i < eventosOrdenados.tamaño() - 1; i++) {
-            for (int j = 0; j < eventosOrdenados.tamaño() - i - 1; j++) {
-                Evento e1 = eventosOrdenados.obtenerPorIndice(j);
-                Evento e2 = eventosOrdenados.obtenerPorIndice(j + 1);
+    for (int i = 0; i < listaEventos.tamaño(); i++) {
+        Evento actual = listaEventos.obtenerPorIndice(i);
+        boolean insertado = false;
 
-                if (e1.getCodigo().compareToIgnoreCase(e2.getCodigo()) > 0) {
-                    // Intercambio manual
-                    Evento temp = e1;
-                    eventosOrdenados.eliminar(e1);
-                    eventosOrdenados.eliminar(e2);
-                    eventosOrdenados.agregarInicio(e2);
-                    eventosOrdenados.agregarInicio(temp);
-
-                    // Restaurar el orden del resto
-                    ListaSimple<Evento> temporal = new ListaSimple<>();
-                    for (int k = 2; k < eventosOrdenados.tamaño(); k++) {
-                        temporal.agregar(eventosOrdenados.obtenerPorIndice(k));
-                    }
-                    eventosOrdenados.vaciar();
-                    eventosOrdenados.agregar(temp);
-                    eventosOrdenados.agregar(e2);
-                    for (int k = 0; k < temporal.tamaño(); k++) {
-                        eventosOrdenados.agregar(temporal.obtenerPorIndice(k));
-                    }
-                }
+        for (int j = 0; j < eventosOrdenados.tamaño(); j++) {
+            Evento comparado = eventosOrdenados.obtenerPorIndice(j);
+            if (actual.getCodigo().compareTo(comparado.getCodigo()) < 0) {
+                eventosOrdenados.insertarEn(j, actual);
+                insertado = true;
+                break;
             }
         }
 
-        // Paso 3: Construir el string de retorno
-        String salida = "";
-        for (int i = 0; i < eventosOrdenados.tamaño(); i++) {
-            Evento ev = eventosOrdenados.obtenerPorIndice(i);
-            int capacidadTotal = ev.getSalaAsignada().getCapacidad();
-            int vendidas = (ev.getEntradasVendidas() != null) ? ev.getEntradasVendidas().tamaño() : 0;
-            int disponibles = capacidadTotal - vendidas;
-
-            salida += "Código: " + ev.getCodigo() + "\n";
-            salida += "Descripción: " + ev.getDescripcion() + "\n";
-            salida += "Sala asignada: " + ev.getSalaAsignada().getNombre() + "\n";
-            salida += "Entradas disponibles: " + disponibles + "\n";
-            salida += "Entradas vendidas: " + vendidas + "\n";
-            salida += "-------------------------\n";
+        if (!insertado) {
+            eventosOrdenados.agregarFin(actual);
         }
-        System.out.println(salida); // <---Debug
-        return new Retorno(Retorno.Resultado.OK, salida.toString().trim());
     }
+
+    String resultado = "";
+
+    for (int i = 0; i < eventosOrdenados.tamaño(); i++) {
+        Evento e = eventosOrdenados.obtenerPorIndice(i);
+        int capacidad = e.getSalaAsignada().getCapacidad();
+        String nombreSala = e.getSalaAsignada().getNombre();
+        int vendidas = e.getEntradasVendidas().tamaño();
+        int disponibles = capacidad - vendidas;
+
+        String eventoString = e.getCodigo() + "-" +
+                              e.getDescripcion() + "-" +
+                              nombreSala + "-" +
+                              disponibles + "-" +
+                              vendidas;
+
+        if (resultado.equals("")) {
+            resultado = eventoString;
+        } else {
+            resultado = resultado + "#" + eventoString;
+        }
+    }
+
+    System.out.println(resultado);
+    return Retorno.ok(resultado);
+}
 
   @Override
     public Retorno listarClientes() {

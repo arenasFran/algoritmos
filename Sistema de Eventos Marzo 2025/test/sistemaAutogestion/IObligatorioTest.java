@@ -121,8 +121,17 @@ public class IObligatorioTest {
     }
 
     @Test
-    public void testListarEventos() {
-        //Completar para primera entrega
+    public void testListarEventos() {        
+        sistema.registrarSala("Sala F", 14);
+        sistema.registrarSala("Sala A", 16);
+        sistema.registrarSala("Sala B", 18);
+        sistema.registrarEvento("CUC22", "Tango Azul", 13, LocalDate.of(2025, 10, 7)); // Sala B
+        sistema.registrarEvento("TEC43", "Seminario de Tecnología", 17, LocalDate.of(2025, 10, 7)); // Sala B
+        sistema.registrarEvento("KAK34", "Noche de Rock", 15, LocalDate.of(2025, 10, 7)); // Sala B
+        Retorno ret = sistema.listarEventos();
+        assertEquals(Retorno.Resultado.OK, ret.resultado);
+        assertEquals("CUC22-Tango Azul-Sala F-14-0#KAK34-Noche de Rock-Sala A-16-0#TEC43-Seminario de Tecnología-Sala B-18-0", ret.valorString);
+
     }
 
     @Test
