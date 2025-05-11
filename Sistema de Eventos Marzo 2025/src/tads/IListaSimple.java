@@ -27,5 +27,8 @@ public interface IListaSimple<T> {
     public void setInicio(Nodo<T> nodo);
 
     public T obtenerPorIndice(int indice);
+    
+    public void setPorIndice(int indice, T dato);
+
 
 }

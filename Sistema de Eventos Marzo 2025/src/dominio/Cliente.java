@@ -38,7 +38,7 @@ public class Cliente implements Comparable<Cliente> {
 
     @Override
     public String toString() {
-        return this.cedula + "-" + this.name;
+        return this.getCedula() + "-" + this.name;
     }
 
     @Override

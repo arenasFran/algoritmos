@@ -155,17 +155,30 @@ public class Sistema implements IObligatorio {
     Nodo<Cliente> actual = listaClientes.getInicio();
     while (actual != null) {
         if (actual.getDato().equals(c)) {
-            return Retorno.error2();
+            return Retorno.error2(); // Error si el cliente ya está registrado
         }
         actual = actual.getSiguiente();
     }
 
     // Insertar al final sin preocuparse por el orden
     Nodo<Cliente> nuevoNodo = new Nodo<>(c);
-    listaClientes.agregarFin(nuevoNodo);
+    
+    // Si la lista está vacía, el nuevo nodo será el inicio
+    if (listaClientes.getInicio() == null) {
+        listaClientes.setInicio(nuevoNodo);
+    } else {
+        // Si la lista no está vacía, recorrer hasta el último nodo
+        actual = listaClientes.getInicio();
+        while (actual.getSiguiente() != null) {
+            actual = actual.getSiguiente();
+        }
+        // Enlazamos el último nodo con el nuevo nodo
+        actual.setSiguiente(nuevoNodo);
+    }
 
-    return Retorno.ok();
+    return Retorno.ok();  // Retorna éxito
 }
+
 
 
     @Override
@@ -270,9 +283,10 @@ public class Sistema implements IObligatorio {
         return new Retorno(Retorno.Resultado.OK, salida.toString().trim());
     }
 
-        @Override
-    public Retorno listarClientes() {
-    ordenarListaClientes(); // <- Aquí se ordena justo antes de imprimir
+  @Override
+public Retorno listarClientes() {
+    // Ordenamos la lista de clientes por cédula de menor a mayor
+    ordenarClientesPorCedula();
 
     Nodo<Cliente> actual = listaClientes.getInicio();
     while (actual != null) {
@@ -286,35 +300,30 @@ public class Sistema implements IObligatorio {
     return Retorno.ok();
 }
 
-    private void ordenarListaClientes() {
-    Nodo<Cliente> sorted = null;  // lista ordenada temporal
+    public void ordenarClientesPorCedula() {
+    int limite = listaClientes.tamaño();
+    boolean ordenado = false;
 
-    Nodo<Cliente> actual = listaClientes.getInicio();
-    while (actual != null) {
-        Nodo<Cliente> siguiente = actual.getSiguiente();
-
-        // Inserta actual en la posición correcta de la lista sorted
-        if (sorted == null || actual.getDato().compareTo(sorted.getDato()) < 0) {
-            actual.setSiguiente(sorted);
-            sorted = actual;
-        } else {
-            Nodo<Cliente> temp = sorted;
-            while (temp.getSiguiente() != null && actual.getDato().compareTo(temp.getSiguiente().getDato()) > 0) {
-                temp = temp.getSiguiente();
+    for (int i = 1; i < limite && !ordenado; i++) {
+        ordenado = true;
+        for (int j = 0; j < limite - 1; j++) {
+            Cliente c1 = listaClientes.obtenerPorIndice(j);
+            Cliente c2 = listaClientes.obtenerPorIndice(j + 1);
+            
+            if (c1.getCedula().compareTo(c2.getCedula()) > 0) {
+                // Intercambiar
+                listaClientes.setPorIndice(j, c2);
+                listaClientes.setPorIndice(j + 1, c1);
+                ordenado = false;
             }
-            actual.setSiguiente(temp.getSiguiente());
-            temp.setSiguiente(actual);
         }
-
-        actual = siguiente;
     }
-
-    listaClientes.setInicio(sorted);  // actualiza la lista original
 }
 
 
-   
 
+
+  
     @Override
 
     public Retorno esSalaOptima(String vistaSala[][]) {
@@ -389,5 +398,7 @@ public class Sistema implements IObligatorio {
     public Retorno comprasXDia(int mes) {
         return Retorno.noImplementada();
     }
+    
+    
 
 }

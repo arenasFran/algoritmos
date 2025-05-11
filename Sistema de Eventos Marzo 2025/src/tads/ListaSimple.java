@@ -166,4 +166,9 @@ public class ListaSimple<T> implements IListaSimple<T> {
         fin = null;
         tamaño = 0;
     }
+
+    @Override
+    public void setPorIndice(int indice, T dato) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
