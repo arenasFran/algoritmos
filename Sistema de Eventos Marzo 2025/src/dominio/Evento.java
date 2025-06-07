@@ -1,7 +1,7 @@
 package dominio;
 
 import java.time.LocalDate;
-import tads.ListaSimple;
+import tads.ListaSE.ListaSimple;
 
 /**
  *

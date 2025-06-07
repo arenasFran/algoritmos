@@ -1,11 +1,11 @@
-package tads;
+package tads.ListaSE;
 
-public class Nodo<T> {
+public class NodoSimple<T> {
 
     T dato;
-    Nodo<T> siguiente;
+    NodoSimple<T> siguiente;
 
-    public Nodo(T dato) {
+    public NodoSimple(T dato) {
         this.dato = dato;
         this.siguiente = null;
     }
@@ -18,11 +18,11 @@ public class Nodo<T> {
         this.dato = dato;
     }
 
-    public Nodo<T> getSiguiente() {
+    public NodoSimple<T> getSiguiente() {
         return siguiente;
     }
 
-    public void setSiguiente(Nodo<T> siguiente) {
+    public void setSiguiente(NodoSimple<T> siguiente) {
         this.siguiente = siguiente;
     }
 

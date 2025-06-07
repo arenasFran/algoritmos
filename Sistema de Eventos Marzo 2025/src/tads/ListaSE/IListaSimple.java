@@ -1,4 +1,4 @@
-package tads;
+package tads.ListaSE;
 
 public interface IListaSimple<T> {
 
@@ -14,7 +14,7 @@ public interface IListaSimple<T> {
 
     public int tamaño();
 
-    public Nodo<T> getInicio();
+    public NodoSimple<T> getInicio();
 
     public T obtenerPorIndice(int indice);
 

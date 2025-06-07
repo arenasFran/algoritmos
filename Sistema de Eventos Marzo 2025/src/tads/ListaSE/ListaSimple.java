@@ -1,9 +1,9 @@
-package tads;
+package tads.ListaSE;
 
 public class ListaSimple<T> implements IListaSimple<T> {
 
-    private Nodo<T> inicio;
-    private Nodo<T> fin;
+    private NodoSimple<T> inicio;
+    private NodoSimple<T> fin;
     private int tamaño;
 
     public int getTamaño() {
@@ -22,7 +22,7 @@ public class ListaSimple<T> implements IListaSimple<T> {
             throw new IndexOutOfBoundsException("Índice fuera de rango: " + indice);
         }
 
-        Nodo<T> actual = inicio;
+        NodoSimple<T> actual = inicio;
         for (int i = 0; i < indice; i++) {
             actual = actual.getSiguiente();
         }
@@ -31,7 +31,7 @@ public class ListaSimple<T> implements IListaSimple<T> {
 
     @Override
     public void agregar(T dato) {
-        Nodo<T> nuevoNodo = new Nodo<>(dato);
+        NodoSimple<T> nuevoNodo = new NodoSimple<>(dato);
         if (inicio == null) {
             inicio = nuevoNodo;
             fin = nuevoNodo;
@@ -44,7 +44,7 @@ public class ListaSimple<T> implements IListaSimple<T> {
 
     @Override
     public void agregarInicio(T dato) {
-        Nodo<T> nuevoNodo = new Nodo<>(dato);
+        NodoSimple<T> nuevoNodo = new NodoSimple<>(dato);
         if (inicio == null) {
             inicio = nuevoNodo;
             fin = nuevoNodo;
@@ -57,7 +57,7 @@ public class ListaSimple<T> implements IListaSimple<T> {
 
     @Override
     public void agregarFin(T dato) {
-        Nodo<T> nuevoNodo = new Nodo<>(dato);
+        NodoSimple<T> nuevoNodo = new NodoSimple<>(dato);
         if (inicio == null) {
             inicio = fin = nuevoNodo;
         } else {
@@ -84,7 +84,7 @@ public class ListaSimple<T> implements IListaSimple<T> {
         }
 
         // Búsqueda del nodo a eliminar
-        Nodo<T> actual = inicio;
+        NodoSimple<T> actual = inicio;
         while (actual.getSiguiente() != null) {
             if (actual.getSiguiente().getDato().equals(dato)) {
                 // Actualizar fin si se elimina el último nodo
@@ -103,7 +103,7 @@ public class ListaSimple<T> implements IListaSimple<T> {
 
     @Override
     public boolean contiene(T cliente) {
-        Nodo<T> nodoActual = inicio;
+        NodoSimple<T> nodoActual = inicio;
         while (nodoActual != null) {
             if (nodoActual.getDato().equals(cliente)) {
                 return true;
@@ -119,7 +119,7 @@ public class ListaSimple<T> implements IListaSimple<T> {
     }
 
     @Override
-    public Nodo<T> getInicio() {
+    public NodoSimple<T> getInicio() {
         return inicio;
     }
 
@@ -129,7 +129,7 @@ public class ListaSimple<T> implements IListaSimple<T> {
             return;
         }
 
-        Nodo<T> nuevo = new Nodo<>(dato);
+        NodoSimple<T> nuevo = new NodoSimple<>(dato);
 
         if (indice == 0) {
             nuevo.setSiguiente(inicio);
@@ -138,7 +138,7 @@ public class ListaSimple<T> implements IListaSimple<T> {
                 fin = nuevo;
             }
         } else {
-            Nodo<T> actual = inicio;
+            NodoSimple<T> actual = inicio;
             for (int i = 0; i < indice - 1; i++) {
                 actual = actual.getSiguiente();
             }

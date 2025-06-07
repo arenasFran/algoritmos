@@ -4,9 +4,9 @@ import dominio.Cliente;
 import dominio.Evento;
 import dominio.Sala;
 import java.time.LocalDate;
-import tads.IListaSimple;
-import tads.ListaSimple;
-import tads.Nodo;
+import tads.ListaSE.IListaSimple;
+import tads.ListaSE.ListaSimple;
+import tads.ListaSE.NodoSimple;
 
 public class Sistema implements IObligatorio {
 
